@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load l10n %}
+
+{% block head %}
+<title>Список товаров</title>
+<script type="text/javascript" src="{% static 'js/itemList.js' %}"></script>
+<script>
+$(document).ready(function() {
+    $("#nav_homepage").attr("class", "active");
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row" style="margin-bottom: 40px;">
+
+</div>
+<div class="row">
+
+    <ul class="nav nav-tabs">
+        {% for tag in productClasses %}
+            <li {% if tag.slug == cls %}class="active"{% endif %}>
+                <a data-toggle="tab" href="#{{tag.slug}}">
+                    {{ tag.name }}
+                    <span class="badge">{{ tag.product_set.all|length }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content">
+        {% for tag in productClasses %}
+            <div id="{{ tag.slug }}" {% if tag.slug == cls %}
+            class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
+                <div class="table-responsive">
+                     <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Изображение</th>
+                            <th>Наименование</th>
+                            <th>Вариант</th>
+                            <th>цена</th>
+                            <th>на складе</th>
+                            <th>количество</th>
+                            <th>ед измерения</th>
+                            <th>сумма</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in tag.product_set.all %}
+                                <tr>
+                                    <th>
+                                        <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
+                                    </th>
+                                    <th>
+                                        <h5>
+                                            <span id="popover_{{product.slug}}" style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{product.name}}</h4>' data-html="true" data-content='<div>
+                                                    <img class="img-circle" src="/media/{{ product.image }}" height="150px" width="150px"/>
+                                                </div>
+                                                <div>
+                                                    {{ product.description|safe }}
+                                                </div>
+                                                <div>
+                                                    <h4>Варианты:</h4>
+                                                    <ul>
+                                                        {% for item in product.productvariant_set.all %}
+                                                        <li>
+                                                        {{item.addition}}
+                                                        </li>
+                                                        {% endfor %}
+                                                    <ul>
+                                                </div>
+                                                <div>
+                                                    {% for pclass in product.productClass.all %}
+                                                        <a href="itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
+                                                    {% endfor%}
+                                                </div>'>
+                                                {{ product.name }}
+                                            </span>
+                                        </h5>
+                                    </th>
+                                    <th>
+                                        <select class="form-control variant-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="selection_{{ product.slug }}_{{tag.slug}}">
+                                            {% for item in product.productvariant_set.all %}
+                                                <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <span data-tag="{{tag.slug}}" data-product="{{product.slug}}" data-toggle="popover" title='<h4>Цены</h4>' style="white-space: nowrap; border-bottom: 1px dashed blue;" data-html="true" class="item-price">
+                                            ?
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span style="white-space: nowrap;" data-tag="{{tag.slug}}" data-product="{{product.slug}}" class="item-count">
+                                            ?
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <input type="number" class="form-control quantity-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="quantity_{{product.slug}}_{{tag.slug}}" value="0" min="0"/>
+                                    </th>
+                                    <th style="white-space: nowrap;">
+                                        {{product.measure}}
+                                    </th>
+                                    <th>
+                                        <span data-tag="{{tag.slug}}" style="white-space: nowrap;" data-product="{{product.slug}}" class="product-sum" id="sm_{{ product.slug }}_{{tag.slug}}">0 р</span>
+                                    </th>
+                                    <th>
+                                        <button data-tag="{{tag.slug}}" data-content="" data-placement="top" data-product="{{product.slug}}" id="btn_{{ product.slug }}_{{tag.slug}}" type="button" class="btn btn-success btn-add-cart">Добавить в корзину
+                                        </button>
+                                    </th>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

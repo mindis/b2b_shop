@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load l10n %}
+
+{% block head %}
+<title>Мои заказы</title>
+{% endblock %}
+
+{% block content %}
+<div class="row" style="margin-bottom: 40px;">
+<h2>
+    Заказы
+</h2>
+</div>
+<div class="row">
+    <table class="table table-striped">
+        <tr>
+            <th>Счет №</th>
+            <th>Дата</th>
+            <th>Покупатель</th>
+            <th>Продавец</th>
+            <th>Сумма</th>
+            <th>Налог</th>
+            <th><th>
+        </tr>
+        {% for invoce in invoces %}
+        <tr>
+            <td>
+                {{invoce.pk}}
+            </td>
+            <td>
+                {{invoce.date|date:"DATE_FORMAT"}}
+            </td>
+            <td>
+                {{invoce.customer.name}}
+            </td>
+            <td>
+                {{invoce.seller.name}}
+            </td>
+            <td>
+                {{invoce.toPay|floatformat:2|localize}}
+            </td>
+            <td>
+                {{invoce.taxes|floatformat:2|localize}}
+            </td>
+            <td>
+                <a type="button" class="btn btn-default" href="/getinvocepdf?pk={{invoce.pk}}" target="_blank">
+                    Скачать счет
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

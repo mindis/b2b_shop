@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load l10n %}
+
+{% block head %}
+<title>Shop name: {{ item.name }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h1 align="center">Заказ оформлен</h1>
+</div>
+<div class="row">
+<h2 align="center">
+    Спасибо за заказ, вам на эл. почту выслан счет в формате pdf.
+</h2>
+<h2 align="center">
+    В случае возникновения проблем или вопросов обращайтесь по адресу <a href="mailto:email@email.com">email@email.com</a>.
+</h2>
+</div>
+<hr/>
+<div class="row">
+    
+</div>
+<iframe src='/getinvocepdf?pk={{pk}}' width="100%" height="800px"></iframe>
+<!--<div class="row">
+<div id="table" class="row">
+    <h2>Заказ</h2>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Количество</th> 
+                <th>Мера</th>
+                <th>Сумма</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for orderItem in invoce.order.items.all %}
+                    <tr id="tr_{{orderItem.pk}}">
+                        <th>
+                            <h5> 
+                        <span data-toggle="popover" title="{{ orderItem.product.name }}" data-html="true" 
+                            data-content="
+                        <div>
+                            <img class='img-circle' src='/media/{{ orderItem.product.image }}' height='100px' width='100px' />
+                        </div>
+                        <div>
+                            {{ orderItem.product.description|safe }}
+                        </div>
+                        <div>
+                            {% for pclass in orderItem.product.product.productClass.all %}
+                                <a href='itemlist/{{pclass.slug}}' class='btn btn-primary'>{{pclass.name}}</a>
+                            {% endfor%}
+                        </div>">{{ orderItem.product.name }} </span>
+                        </h5>
+                        </th>
+                        <th>
+                            {{orderItem.price}} p
+                        </th>
+                        <th>
+                            <span id="quantity_{{orderItem.pk}}">{{orderItem.quantity}}</span>
+                        </th>
+                        <th>
+                            {{orderItem.product.product.measure}}
+                        </th>
+                        <th>
+                            <span id="sm_{{orderItem.pk}}"> {{ orderItem.getSum }}</span> p
+                        </th>
+                    </tr>
+                {% endfor %}
+                 <tr>
+                    <th>Скидка:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th> {{invoce.order.sale}} р</th>
+                </tr>
+                <tr>
+                    <th>Итог:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{invoce.order.getTotalSum}} р</th>
+                </tr>
+            <tbody/>
+        </table>
+    </div>
+</div>-->
+
+{% endblock %}

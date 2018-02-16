@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+{% load humanize%}
+{% load l10n %}
+{% load staticfiles %}
+
+<html>
+<head>
+	<title>invoce</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<style type="text/css">
+
+
+	table, th, td {
+		border: 1px solid black;  
+		border-collapse: collapse; 	
+	}
+	table {
+		width: 100%;
+	}
+	.info {
+		width: auto;
+	}
+	table.noborder, td.noborder, th.noborder {
+		border: 0px solid white;  
+	}
+	</style>
+</head>
+<body>
+	<div style="margin: 50px;">
+		<div class="row">
+			<table>
+				
+					<tr>
+						<td colspan="2" rowspan="2">{{invoce.seller.bank}}</td>
+					    <td>БИК</td>
+					    <td>{{invoce.seller.bik}}</td>
+				  	</tr>
+				  	<tr>
+					    <td>Сч. №</td>
+					    <td>{{invoce.seller.corAcc}}</td>
+				  	</tr>
+				  	<tr>
+					    <td>ИНН {{invoce.seller.inn}}</td>
+					    <td>КПП {{invoce.seller.kpp}}</td>
+					    <td rowspan="1">Сч. №</td>
+					    <td rowspan="1">{{invoce.seller.checkACC}}</td>
+				  	</tr>
+				  	<tr>
+				    	<td colspan="2">{{invoce.seller.name}}</td>
+				  	</tr>
+			</table>
+		</div>
+		<div class="row">
+			<h3>Счет на оплату №{{invoce.pk}} от {{invoce.date|date:"DATE_FORMAT"}}</h3>
+			<hr/>
+			<table class="noborder info">
+				<tbody>
+					<tr class="noborder info">
+						<td style="vertical-align: top;" class="noborder info">Поставщик:</td>
+						<td class="noborder info"><strong>{{invoce.seller.name}},<br> ИНН {{invoce.seller.inn}}, КПП {{invoce.seller.kpp}}</strong></td>
+					</tr>
+					<tr class="noborder info">
+						<td style="vertical-align: top;" class="noborder info">Покупатель:</td>
+						<td class="noborder info"><strong>{{invoce.customer.name}},<br> ИНН {{invoce.customer.inn}}, КПП {{invoce.customer.kpp}}, {{invoce.customer.address}}</strong></td>
+					</tr>
+					<tr class="noborder info">
+						<td style="vertical-align: top;" class="noborder info">Основание:</td>
+						<td class="noborder info"><strong>Без договора</strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="row">
+			<table class="noborder">
+				<thead>
+					<tr>
+						<th style="width: 3%; text-align: center;">№</th>
+						<th style="width: 40%; text-align: center;">Товары</th>
+						<th style="width: 15%; text-align: center;">Кол-во</th>
+						<th style="width: 10%; text-align: center;">Ед.</th>
+						<th style="width: 12%; text-align: center;">Цена</th>
+						<th style="width: 20%; text-align: center;">Сумма</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for orderItem in invoce.order.items.all %}
+					<tr>
+						<td style="text-align: center;"> {{forloop.counter}}</td>
+						<td style="text-align: left;">{{orderItem.product.name}} ({{orderItem.product.vendorCode}})</td>
+						<td style="text-align: right;">{{orderItem.quantity}}&thinsp;</td>
+						<td style="text-align: left;">&thinsp;{{orderItem.product.product.measure}}</td>
+						<td style="text-align: right;">{{orderItem.price|floatformat:2|localize}}&thinsp;</td>
+						<td style="text-align: right;">{{orderItem.getSum|floatformat:2|localize}}&thinsp;</td>
+					</tr>
+					{% endfor %}
+					<tr class="noborder">
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<th class="noborder" colspan="2" style="text-align: right;">Итого:</th>
+						<th class="noborder" style="text-align: right;">{{invoce.order.getTotalSum|floatformat:2|localize}}</th>
+					</tr>
+					<tr class="noborder">
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<th class="noborder" colspan="2" style="text-align: right;">В том числе НДС:</th>
+						<th class="noborder" style="text-align: right;">{{invoce.taxes|floatformat:2|localize}}</th>
+					</tr>
+					<tr class="noborder">
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<td class="noborder"></td>
+						<th class="noborder" colspan="2" style="text-align: right;">Всего к оплате:</th>
+						<th class="noborder" style="text-align: right;">{{invoce.toPay|floatformat:2|localize}}</th>
+					</tr>
+				</tbody>
+			</table>		
+		</div>
+		<div class="row">
+		<p>Всего наименований {{invoce.order.items.all|length}}, на сумму {{invoce.order.getTotalSum|floatformat:2|localize}} руб</p>
+		<p><strong>{{sumInWords}}</strong></p>
+		</div>
+		<div class="row">
+			<p></p>
+		</div>
+		<hr/>
+		<div class="row">
+		</div>
+	</div>
+</body>
+</html>
