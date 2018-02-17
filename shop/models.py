@@ -207,7 +207,7 @@ class Order(models.Model):
     finished = models.BooleanField(default=False, blank=True)
     cancelled = models.BooleanField(default=False, blank=True)
     sale = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
-    invoce = models.OneToOneField('Invoce', on_delete=models.CASCADE, null=True, blank=True, parent_link=True)
+    invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True, blank=True, parent_link=True)
 
     class Meta:
         verbose_name = 'Order'
@@ -344,7 +344,7 @@ class Order(models.Model):
         pass
 
 
-class Invoce(models.Model):
+class Invoice(models.Model):
     date = models.DateTimeField(null=True,blank=True)
     seller = models.ForeignKey('SellerOrganisation', on_delete=models.CASCADE, null=True, blank=True, related_name='+')
     customer = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import ProductClass, Product, ProductVariant, \
                     SaleSum, SaleQuantity, Organisation, \
-                    OrderItem, Order, Invoce, SellerOrganisation,\
+                    OrderItem, Order, Invoice, SellerOrganisation,\
                     Price
 
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
@@ -14,7 +14,7 @@ admin.site.register(ProductClass)
 admin.site.register(Organisation)
 #admin.site.register(OrderItem)
 #admin.site.register(Order)
-#admin.site.register(Invoce)
+#admin.site.register(Invoice)
 admin.site.register(SellerOrganisation)
 #admin.site.register(Price)
 
@@ -50,4 +50,4 @@ class ProductAdmin(SuperModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductVariant, ProductVariantAdmin)
-admin.site.register(Invoce, InvoiceAdmin)
+admin.site.register(Invoice, InvoiceAdmin)

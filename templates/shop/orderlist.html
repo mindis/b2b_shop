@@ -23,28 +23,28 @@
             <th>Налог</th>
             <th><th>
         </tr>
-        {% for invoce in invoces %}
+        {% for invoice in invoices %}
         <tr>
             <td>
-                {{invoce.pk}}
+                {{invoice.pk}}
             </td>
             <td>
-                {{invoce.date|date:"DATE_FORMAT"}}
+                {{invoice.date|date:"DATE_FORMAT"}}
             </td>
             <td>
-                {{invoce.customer.name}}
+                {{invoice.customer.name}}
             </td>
             <td>
-                {{invoce.seller.name}}
+                {{invoice.seller.name}}
             </td>
             <td>
-                {{invoce.toPay|floatformat:2|localize}}
+                {{invoice.toPay|floatformat:2|localize}}
             </td>
             <td>
-                {{invoce.taxes|floatformat:2|localize}}
+                {{invoice.taxes|floatformat:2|localize}}
             </td>
             <td>
-                <a type="button" class="btn btn-default" href="/getinvocepdf?pk={{invoce.pk}}" target="_blank">
+                <a type="button" class="btn btn-default" href="/getinvoicepdf?pk={{invoice.pk}}" target="_blank">
                     Скачать счет
                 </a>
             </td>
