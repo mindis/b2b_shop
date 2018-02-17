@@ -19,9 +19,9 @@
 </div>
 <hr/>
 <div class="row">
-    
+
 </div>
-<iframe src='/getinvocepdf?pk={{pk}}' width="100%" height="800px"></iframe>
+<iframe src='/getinvoicepdf?pk={{pk}}' width="100%" height="800px"></iframe>
 <!--<div class="row">
 <div id="table" class="row">
     <h2>Заказ</h2>
@@ -30,17 +30,17 @@
               <tr>
                 <th>Наименование</th>
                 <th>Цена</th>
-                <th>Количество</th> 
+                <th>Количество</th>
                 <th>Мера</th>
                 <th>Сумма</th>
               </tr>
             </thead>
             <tbody>
-                {% for orderItem in invoce.order.items.all %}
+                {% for orderItem in invoice.order.items.all %}
                     <tr id="tr_{{orderItem.pk}}">
                         <th>
-                            <h5> 
-                        <span data-toggle="popover" title="{{ orderItem.product.name }}" data-html="true" 
+                            <h5>
+                        <span data-toggle="popover" title="{{ orderItem.product.name }}" data-html="true"
                             data-content="
                         <div>
                             <img class='img-circle' src='/media/{{ orderItem.product.image }}' height='100px' width='100px' />
@@ -74,14 +74,14 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th> {{invoce.order.sale}} р</th>
+                    <th> {{invoice.order.sale}} р</th>
                 </tr>
                 <tr>
                     <th>Итог:</th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th>{{invoce.order.getTotalSum}} р</th>
+                    <th>{{invoice.order.getTotalSum}} р</th>
                 </tr>
             <tbody/>
         </table>

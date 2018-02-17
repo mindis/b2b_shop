@@ -17,34 +17,48 @@
         <tr>
             <th>Счет №</th>
             <th>Дата</th>
+            <th>Состояние</th>
             <th>Покупатель</th>
             <th>Продавец</th>
             <th>Сумма</th>
             <th>Налог</th>
             <th><th>
         </tr>
-        {% for invoce in invoces %}
+        {% for invoice in invoices %}
         <tr>
             <td>
-                {{invoce.pk}}
+                {{invoice.pk}}
             </td>
             <td>
-                {{invoce.date|date:"DATE_FORMAT"}}
+                {{invoice.date|date:"DATE_FORMAT"}}
             </td>
             <td>
-                {{invoce.customer.name}}
+                <strong>
+                    {% if invoice.order.active %}
+                        <span class="label label-success"> В процессе </span>
+                    {% endif %}
+                    {% if invoice.order.finished %}
+                        <span class="label label-primary"> Завершён </span>
+                    {% endif %}
+                    {% if invoice.order.cancelled %}
+                        <span class="label label-danger"> Отменен </span>
+                    {% endif %}
+                </strogn>
             </td>
             <td>
-                {{invoce.seller.name}}
+                {{invoice.customer.name}}
             </td>
             <td>
-                {{invoce.toPay|floatformat:2|localize}}
+                {{invoice.seller.name}}
             </td>
             <td>
-                {{invoce.taxes|floatformat:2|localize}}
+                {{invoice.toPay|floatformat:2|localize}}
             </td>
             <td>
-                <a type="button" class="btn btn-default" href="/getinvocepdf?pk={{invoce.pk}}" target="_blank">
+                {{invoice.taxes|floatformat:2|localize}}
+            </td>
+            <td>
+                <a type="button" class="btn btn-default" href="/getinvoicepdf?pk={{invoice.pk}}" target="_blank">
                     Скачать счет
                 </a>
             </td>

@@ -172,37 +172,37 @@ def getItemQuantityInCart(request):
 def orderList(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
-    invoces = Invoce.objects.filter(order__user=request.user).order_by('-date')
-    return render(request, 'shop/orderlist.html', { 'invoces' : invoces })
+    invoices = Invoice.objects.filter(order__user=request.user).order_by('-date')
+    return render(request, 'shop/orderlist.html', { 'invoices' : invoices })
 
 
-def getInvocePdf(request):
-    invoce = get_object_or_404(Invoce.objects, pk=request.GET['pk'])
-    if request.user.is_superuser or request.user == invoce.order.user:
-        invoce_html = get_template('shop/invoce.html').render(
+def getInvoicePdf(request):
+    invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
+    if request.user.is_superuser or request.user == invoice.order.user:
+        invoice_html = get_template('shop/invoice.html').render(
                 {
-                    'invoce' : invoce,
-                    'sumInWords': num2words(invoce.order.getTotalSum(),
+                    'invoice' : invoice,
+                    'sumInWords': num2words(invoice.order.getTotalSum(),
                         lang='ru', to='currency', currency='RUB',
                         seperator=' ', cents=False).capitalize()
                 })
-        pdf = pdfkit.from_string(invoce_html, False, options = {'quiet': ''})
-        
+        pdf = pdfkit.from_string(invoice_html, False, options = {'quiet': ''})
+
         return HttpResponse(pdf, content_type='application/pdf')
-    return HttpResponse('You have not access to this invoce')
+    return HttpResponse('You have not access to this invoice')
 
 
-def getInvoce(request):
-    invoce = get_object_or_404(Invoce.objects, pk=request.GET['pk'])
-    if request.user.is_superuser or request.user == invoce.order.user:
-        return render(request, 'shop/invoce.html',
+def getInvoice(request):
+    invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
+    if request.user.is_superuser or request.user == invoice.order.user:
+        return render(request, 'shop/invoice.html',
             {
-            'invoce' : invoce,
-            'sumInWords': num2words(invoce.order.getTotalSum(),
+            'invoice' : invoice,
+            'sumInWords': num2words(invoice.order.getTotalSum(),
                 lang='ru', to='currency', currency='RUB',
                 seperator=' ', cents=False).capitalize()
             })
-    return HttpResponse('You have not access to this invoce')
+    return HttpResponse('You have not access to this invoice')
 
 
 def cart(request):
@@ -269,7 +269,7 @@ def makeOrder(request):
     if request.user not in org.owners.all():
         org.owners.add(request.user)
 
-    invoce = Invoce.objects.create(
+    invoice = Invoice.objects.create(
         date=timezone.now(),
         seller=SellerOrganisation.objects.get(pk=1),
         customer=org,
@@ -278,15 +278,15 @@ def makeOrder(request):
         comment=comment,
         shipAddress=shipAddress
         )
-    cart.invoce = invoce
+    cart.invoice = invoice
 
     for item in cart.items.all():
         item.product.quantity = max(0, item.product.quantity - item.quantity)
         item.product.save()
 
     cart.activate()
-    invoce.calculateTaxes()
-    return redirect('/endoforder?pk=' + str(invoce.pk))
+    invoice.calculateTaxes()
+    return redirect('/endoforder?pk=' + str(invoice.pk))
 
 
 def itemList(request):
