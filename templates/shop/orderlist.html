@@ -17,6 +17,7 @@
         <tr>
             <th>Счет №</th>
             <th>Дата</th>
+            <th>Состояние</th>
             <th>Покупатель</th>
             <th>Продавец</th>
             <th>Сумма</th>
@@ -30,6 +31,19 @@
             </td>
             <td>
                 {{invoice.date|date:"DATE_FORMAT"}}
+            </td>
+            <td>
+                <strong>
+                    {% if invoice.order.active %}
+                        <span class="label label-success"> В процессе </span>
+                    {% endif %}
+                    {% if invoice.order.finished %}
+                        <span class="label label-primary"> Завершён </span>
+                    {% endif %}
+                    {% if invoice.order.cancelled %}
+                        <span class="label label-danger"> Отменен </span>
+                    {% endif %}
+                </strogn>
             </td>
             <td>
                 {{invoice.customer.name}}
