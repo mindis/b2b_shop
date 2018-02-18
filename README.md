@@ -14,3 +14,11 @@ Built With
 * [pdfkit](https://pypi.python.org/pypi/pdfkit)
 * [num2words](https://pypi.python.org/pypi/num2words/)
 * [Suggestions by DaData.ru](https://dadata.ru/suggestions/)
+
+##
+Screenshots
+![pricelist](screenshots/pricelist.png)
+![addtocart](screenshots/addcart.png)
+![cart](screenshots/cart.png)
+![orderend](screenshots/orderend.png)
+![orderlist](screenshots/orderlist.png)
