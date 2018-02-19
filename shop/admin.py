@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import ProductClass, Product, ProductVariant, \
                     SaleSum, SaleQuantity, Organisation, \
                     OrderItem, Order, Invoice, SellerOrganisation,\
-                    Price
+                    Price, OrderStatus
 
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
@@ -16,6 +16,7 @@ admin.site.register(Organisation)
 #admin.site.register(Order)
 #admin.site.register(Invoice)
 admin.site.register(SellerOrganisation)
+admin.site.register(OrderStatus)
 #admin.site.register(Price)
 
 class PriceInline(SuperInlineModelAdmin, admin.TabularInline):

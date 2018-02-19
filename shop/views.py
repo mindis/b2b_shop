@@ -71,9 +71,7 @@ def getCart(request):
 
         cart = Order.objects.get_or_create(
                 user=request.user,
-                active=False,
-                finished=False,
-                cancelled=False
+                status=OrderStatus.objects.get(pk=1)
                 )[0]
 
         cart.delZeroes()
@@ -93,9 +91,9 @@ def addToCart(request):
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user)
+                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
@@ -117,9 +115,9 @@ def setInCart(request):
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user)
+                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
@@ -136,7 +134,7 @@ def setInCart(request):
 def getCartSum(request):
     if not request.user.is_authenticated:
         return HttpResponse(0)
-    cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+    cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
     if len(cart) == 0:
         return HttpResponse(0)
     cart = cart[0]
@@ -154,9 +152,9 @@ def getItemQuantityInCart(request):
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user)
+                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
@@ -208,9 +206,9 @@ def getInvoice(request):
 def cart(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
-    cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+    cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
     if len(cart) == 0:
-        cart = Order.objects.create(user=request.user)
+        cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
     else:
         cart = cart[0]
     cart.delZeroes()
@@ -221,9 +219,9 @@ def makeOrder(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
     if request.method == 'GET':
-        cart = Order.objects.filter(user=request.user, active=False, finished=False, cancelled=False)
+        cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
         if len(cart) == 0:
-            cart = Order.objects.create(user=request.user)
+            cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
         else:
             cart = cart[0]
         cart.delZeroes()
@@ -247,9 +245,7 @@ def makeOrder(request):
     except:
         cart = Order.objects.get_or_create(
             user=request.user,
-            active=False,
-            finished=False,
-            cancelled=False
+            status=OrderStatus.objects.get(pk=1)
             )[0]
         return render(request, 'shop/customerinfo.html', {'cart':cart, 'errors' : 'Ошибка', 'DADATA_API_KEY': settings.DADATA_API_KEY})
 
@@ -261,9 +257,7 @@ def makeOrder(request):
         )[0]
     cart = Order.objects.get_or_create(
         user=request.user,
-        active=False,
-        finished=False,
-        cancelled=False
+        status=OrderStatus.objects.get(pk=1)
         )[0]
 
     if request.user not in org.owners.all():

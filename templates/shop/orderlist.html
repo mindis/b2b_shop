@@ -34,14 +34,10 @@
             </td>
             <td>
                 <strong>
-                    {% if invoice.order.active %}
-                        <span class="label label-success"> В процессе </span>
-                    {% endif %}
-                    {% if invoice.order.finished %}
-                        <span class="label label-primary"> Завершён </span>
-                    {% endif %}
-                    {% if invoice.order.cancelled %}
-                        <span class="label label-danger"> Отменен </span>
+                    {% if invoice.order.status %}
+                    <center>
+                        <span style="color: {{invoice.order.status.color}};"> {{invoice.order.status.name}} </span>
+                    </center>
                     {% endif %}
                 </strogn>
             </td>

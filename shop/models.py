@@ -188,7 +188,7 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = 'OrderItem'
         verbose_name_plural = 'OrderItems'
-        ordering = ['product']
+        #ordering = ['product']
 
     def __str__(self):
         return 'OrderItem:' + str(self.product) + ' ' + str(self.quantity)
@@ -198,14 +198,29 @@ class OrderItem(models.Model):
         return Decimal(self.price) * int(self.quantity)
 
 
+class OrderStatus(models.Model):
+    name = models.CharField(max_length=250, default='', blank=True)
+    color = models.CharField(max_length=200, default='', blank=True)
+
+    class Meta:
+        verbose_name = 'OrderStatus'
+        verbose_name_plural = 'OrderStatuses'
+        ordering = ['name']
+
+
+    def __str__(self):
+        return self.name + ' (' + self.color + ')'
+
+
 class Order(models.Model):
     datetime = models.DateTimeField(null=True, blank=True)
     #organisation = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey('auth.user', on_delete=models.CASCADE)
     #items = models.ManyToManyField('OrderItem', blank=True)
-    active = models.BooleanField(default=False, blank=True)
-    finished = models.BooleanField(default=False, blank=True)
-    cancelled = models.BooleanField(default=False, blank=True)
+    #active = models.BooleanField(default=False, blank=True)
+    #finished = models.BooleanField(default=False, blank=True)
+    #cancelled = models.BooleanField(default=False, blank=True)
+    status = models.ForeignKey('OrderStatus', on_delete=models.CASCADE, blank=True, null=True)
     sale = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
     invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True, blank=True, parent_link=True)
 
@@ -217,27 +232,28 @@ class Order(models.Model):
     def __str__(self):
         return 'Order:' + str(self.datetime)
         + ' by ' + str(self.organisation)
-        + ' active:' + str(self.active)
-        + ' finished:' + str(self.finished)
-        + ' cancelled:' + str(self.cancelled)
+        + ' status:' + str(self.status.name)
 
     def activate(self):
-        self.finished = False
-        self.active = True
-        self.cancelled = False
+        #self.finished = False
+        #self.active = True
+        #self.cancelled = False
+        self.status=OrderStatus.objects.get(pk=2)
         self.datetime = timezone.now()
         self.save()
 
     def finish(self):
-        self.finished = True
-        self.active = False
-        self.cancelled = False
+        #self.finished = True
+        #self.active = False
+        #self.cancelled = False
+        self.status=OrderStatus.objects.get(pk=3)
         self.save()
 
     def cancel(self):
-        self.finished = False
-        self.active = False
-        self.cancelled = True
+        #self.finished = False
+        #self.active = False
+        #self.cancelled = True
+        self.status=OrderStatus.objects.get(pk=4)
         self.save()
 
     def delZeroes(self):
