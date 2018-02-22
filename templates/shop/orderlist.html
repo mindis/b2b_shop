@@ -11,11 +11,9 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<div class="row" style="margin-bottom: 40px;">
-<h2>
+<h1>
     Заказы
-</h2>
-</div>
+</h1>
 <div class="row">
     <table class="table table-striped">
         <tr>
@@ -25,7 +23,6 @@ $(document).ready(function() {
             <th>Покупатель</th>
             <th>Продавец</th>
             <th>Сумма</th>
-            <th>Налог</th>
             <th><th>
         </tr>
         {% for invoice in invoices %}
@@ -52,11 +49,9 @@ $(document).ready(function() {
                 {{invoice.seller.name}}
             </td>
             <td>
-                {{invoice.toPay|floatformat:2|localize}}
+                {{invoice.toPay|floatformat:2|localize}} р
             </td>
-            <td>
-                {{invoice.taxes|floatformat:2|localize}}
-            </td>
+
             <td>
                 <a type="button" class="btn btn-default" href="/getinvoicepdf?pk={{invoice.pk}}" target="_blank">
                     Скачать счет
