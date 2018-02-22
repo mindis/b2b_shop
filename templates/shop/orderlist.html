@@ -3,7 +3,11 @@
 {% load l10n %}
 
 {% block head %}
-<title>Мои заказы</title>
+<script>
+$(document).ready(function() {
+    $("#nav_myorders").attr("class", "active");
+});
+</script>
 {% endblock %}
 
 {% block content %}

@@ -2,7 +2,11 @@
 {% load l10n %}
 
 {% block head %}
-<title>Shop name: {{ item.name }}</title>
+<script>
+$(document).ready(function() {
+    $("#nav_cart").attr("class", "active");
+});
+</script>
 {% endblock %}
 
 {% block content %}
