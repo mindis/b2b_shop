@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'^itemlist/(?P<cls>\w+)', views.itemListSelection, name='itemlistselection'),
     url(r'^login/$',  RedirectView.as_view(pattern_name='account/login')),
     #url(r'^logout', views.logoutUser, name='logoutUser'),
-    url(r'^order/$', views.makeOrder, name='order')
+    url(r'^order/$', views.makeOrder, name='order'),
+    url(r'^about/$', views.about, name='about')
     #url(r'^registration', views.registerUser, name='registerUser'),
     #url(r'^setcart', views.setCart, name='setCart')
 ]

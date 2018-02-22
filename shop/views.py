@@ -318,6 +318,9 @@ def itemPage(request, itemSlug):
     return render(request, 'shop/itemPage.html', {'item' : item})
 
 
+def about(request):
+    return render(request, 'shop/about.html', {})
+
 # auth
 
 class LoginView(account.views.LoginView):
