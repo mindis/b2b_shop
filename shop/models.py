@@ -28,6 +28,7 @@ class Product(models.Model):
     priority = models.IntegerField(default=0, blank=True)
     productClass = models.ManyToManyField('ProductClass', blank=True)
     measure = models.CharField(max_length=50, default='шт', blank=True)
+    available = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Product'
@@ -48,6 +49,7 @@ class ProductVariant(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, blank=True)
     quantity = models.IntegerField(default=0, blank=True)
     vendorCode = models.CharField(default=0, max_length=50, blank=True)
+    available = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'ProductVariant'
@@ -180,10 +182,10 @@ class SellerOrganisation(models.Model):
 
 
 class OrderItem(models.Model):
-    product = models.ForeignKey('ProductVariant', on_delete=models.CASCADE)
+    product = models.ForeignKey('ProductVariant', on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, blank=True)
     price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True) # price per one
-    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items', related_query_name='items', blank=True, null=True)
+    order = models.ForeignKey('Order', on_delete=models.SET_NULL, related_name='items', related_query_name='items', blank=True, null=True)
 
     class Meta:
         verbose_name = 'OrderItem'
@@ -215,14 +217,14 @@ class OrderStatus(models.Model):
 class Order(models.Model):
     datetime = models.DateTimeField(null=True, blank=True)
     #organisation = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey('auth.user', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.user', on_delete=models.SET_NULL, null=True)
     #items = models.ManyToManyField('OrderItem', blank=True)
     #active = models.BooleanField(default=False, blank=True)
     #finished = models.BooleanField(default=False, blank=True)
     #cancelled = models.BooleanField(default=False, blank=True)
-    status = models.ForeignKey('OrderStatus', on_delete=models.CASCADE, blank=True, null=True)
+    status = models.ForeignKey('OrderStatus', on_delete=models.SET_NULL, blank=True, null=True)
     sale = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
-    invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True, blank=True, parent_link=True)
+    invoice = models.OneToOneField('Invoice', on_delete=models.SET_NULL, null=True, blank=True, parent_link=True)
 
     class Meta:
         verbose_name = 'Order'
@@ -362,8 +364,8 @@ class Order(models.Model):
 
 class Invoice(models.Model):
     date = models.DateTimeField(null=True,blank=True)
-    seller = models.ForeignKey('SellerOrganisation', on_delete=models.CASCADE, null=True, blank=True, related_name='+')
-    customer = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
+    seller = models.ForeignKey('SellerOrganisation', on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    customer = models.ForeignKey('Organisation', on_delete=models.SET_NULL, null=True, blank=True)
     personInCharge = models.CharField(max_length=250, default='', blank=True)
     shipAddress = models.CharField(max_length=250, default='', blank=True)
     comment = models.TextField(default='', blank=True)
