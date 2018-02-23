@@ -361,6 +361,28 @@ class Order(models.Model):
     def applySale(self, sale):
         pass
 
+    def getDelivery(self):
+        sm = self.getTotalSum()
+        dSum = Decimal('inf');
+        # for is bad; I will replace it with reduce
+        for item in Delivery.objects.all():
+            if item.minSum <= sm:
+                dSum = min(dSum, item.price)
+        return dSum
+
+
+class Delivery(models.Model):
+    minSum = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+    price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+
+    class Meta:
+        verbose_name = 'Delivery'
+        verbose_name_plural = 'Delivery'
+        ordering = ['price']
+
+    def __str__(self):
+        return "delivery"
+
 
 class Invoice(models.Model):
     date = models.DateTimeField(null=True,blank=True)
@@ -370,10 +392,19 @@ class Invoice(models.Model):
     shipAddress = models.CharField(max_length=250, default='', blank=True)
     comment = models.TextField(default='', blank=True)
     taxes = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+    deliverySum = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
 
-    def calculateTaxes(self):
-        self.taxes = Decimal((self.order.getTotalSum() * Decimal(0.18) / Decimal(1.18)).quantize(Decimal('.01'), rounding=ROUND_CEILING))
+    def calculateDelivery(self):
+        self.deliverySum = self.order.getDelivery()
         self.save()
 
+    def calculateTaxes(self):
+        self.taxes = Decimal(((self.order.getTotalSum() + self.deliverySum) * Decimal(0.18) / Decimal(1.18)).quantize(Decimal('.01'), rounding=ROUND_CEILING))
+        self.save()
+
+    def recalc(self):
+        self.calculateDelivery()
+        self.calculateTaxes()
+
     def toPay(self):
-        return self.order.getTotalSum()
+        return self.order.getTotalSum() + self.deliverySum

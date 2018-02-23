@@ -17,7 +17,7 @@ import shop.forms
 import account.forms
 import account.views
 
-# methods returning JSON
+# methods returning JSON or string/int/decimal
 
 def getItems(request):
     if request.method == 'POST':
@@ -141,6 +141,26 @@ def getCartSum(request):
     return HttpResponse(cart.getTotalSum())
 
 
+def getDelivery(request):
+    if not request.user.is_authenticated:
+        return HttpResponse('0')
+    cart = Order.objects.get_or_create(
+        user=request.user,
+        status=OrderStatus.objects.get(pk=1)
+        )[0]
+    return HttpResponse(cart.getDelivery())
+
+
+def getTotal(request):
+    if not request.user.is_authenticated:
+        return HttpResponse('0')
+    cart = Order.objects.get_or_create(
+        user=request.user,
+        status=OrderStatus.objects.get(pk=1)
+        )[0]
+    return HttpResponse(cart.getDelivery() + cart.getTotalSum())
+
+
 def getStored(request):
     pass
 
@@ -180,7 +200,7 @@ def getInvoicePdf(request):
         invoice_html = get_template('shop/invoice.html').render(
                 {
                     'invoice' : invoice,
-                    'sumInWords': num2words(invoice.order.getTotalSum(),
+                    'sumInWords': num2words(invoice.toPay(),
                         lang='ru', to='currency', currency='RUB',
                         seperator=' ', cents=False).capitalize()
                 })
@@ -196,7 +216,7 @@ def getInvoice(request):
         return render(request, 'shop/invoice.html',
             {
             'invoice' : invoice,
-            'sumInWords': num2words(invoice.order.getTotalSum(),
+            'sumInWords': num2words(invoice.toPay(),
                 lang='ru', to='currency', currency='RUB',
                 seperator=' ', cents=False).capitalize()
             })
@@ -279,7 +299,7 @@ def makeOrder(request):
         item.product.save()
 
     cart.activate()
-    invoice.calculateTaxes()
+    invoice.recalc()
     return redirect('/endoforder?pk=' + str(invoice.pk))
 
 

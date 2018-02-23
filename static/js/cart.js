@@ -4,12 +4,18 @@ function notify(text) {
 }
 
 function update(item) {
-	var q = $(".item-quantity[data-product=" + item + "]").val();
+	var q = parseInt($(".item-quantity[data-product=" + item + "]").val());
 	$(".item-price[data-product=" + item + "]").text(normalize(getItemPrice(item, q)));
 	$(".item-sum[data-product=" + item + "]").text(normalize(getItemPrice(item, q) * q));
 	updateCartSum(function() {
 		$("#cart-total").text(normalize(cartSum));
 	});
+    updateDeliverySum(function(){
+        $("#delivery-sum").text(normalize(cartSum));
+    });
+    updateTotalSum(function(){
+        $("#total").text(normalize(totalSum));
+    });
 }
 
 $(document).ready(function() {
@@ -19,26 +25,31 @@ $(document).ready(function() {
 		var item = $(this).attr("data-product");
 		$(".item-quantity[data-product=" + item + "]").val(0);
 		setInCart(item, 0, function(data, status) {
-			if (data == 'error') { 
+			if (data == 'error') {
                 notifyId('#btn_rm_' + item, 'ошибка');
+                $("#tr_" + item).hide();
             } else if (data == 'not authenticated') {
                 notifyId('#btn_rm_' + item, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
+                $("#tr_" + item).hide();
             } else if (data == 'stored quantity is too small'){
                 notifyId('#btn_rm_' + item, 'на складе нет столько товаров');
+                $("#tr_" + item).hide();
             } else {
                 notifyId('#btn_rm_' + item, 'обновлено');
+                $("#tr_" + item).hide();
             }
+            update(item);
 		});
-		update(item);
+		//update(item);
 		$("#tr_" + item).hide();
 	});
 
 	$(".item-quantity").on('change keyup paste', function() {
 		var item = $(this).attr("data-product");
-		var q = $(".item-quantity[data-product=" + item + "]").val();
+		var q = parseInt($(".item-quantity[data-product=" + item + "]").val());
 		console.log(item, q);
 		setInCart(item, q, function(data, status) {
-			if (data == 'error') { 
+			if (data == 'error') {
                 notifyId('#btn_rm_' + item, 'ошибка');
             } else if (data == 'not authenticated') {
                 notifyId('#btn_rm_' + item, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
@@ -47,13 +58,13 @@ $(document).ready(function() {
             } else {
                 notifyId('#btn_rm_' + item, 'обновлено');
             }
+			update(item);
 		});
-		update(item);
 	});
 
 	$(".item-quantity").on('mouseover', function() {
 		var item = $(this).attr("data-product");
-		var q = $(".item-quantity[data-product=" + item + "]").val();
+		var q = parseInt($(".item-quantity[data-product=" + item + "]").val());
 		console.log(item, q);
 		setInCart(item, q, function(data, status) {
 			console.log(data);

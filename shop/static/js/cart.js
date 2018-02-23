@@ -10,6 +10,12 @@ function update(item) {
 	updateCartSum(function() {
 		$("#cart-total").text(normalize(cartSum));
 	});
+    updateDeliverySum(function(){
+        $("#delivery-sum").text(normalize(deliverySum));
+    });
+    updateTotalSum(function(){
+        $("#total").text(normalize(totalSum));
+    });
 }
 
 $(document).ready(function() {

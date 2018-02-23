@@ -1,14 +1,14 @@
 var cartSum = 0;
+var deliverySum = 0;
+var totalSum = 0;
 var itemList = [];
 var priceList = {};
 var items = {};
-//var stored = {}
 var cart = {};
 
 function normalize(x) {
-    return x.toFixed(2).toString().replace('.', ',');
+    return (+x).toFixed(2).toString().replace('.', ',').replace(/(\d{1,3}(?=(\d{3})+(?:\.\d|\b)))/g,"$1" + decodeURI('%E2%80%89'));
 }
-
 
 function getItemPrice(item, count) {
     if (!(item in priceList)) {
@@ -19,10 +19,9 @@ function getItemPrice(item, count) {
     var mxLower = -1;
     var price = 0;
     for (key in priceList[item]) {
-        //console.log(priceList[item][key]);
         if ((+key) <= count && mxLower < (+key)) {
             mxLower = (+key);
-            price = priceList[item][key];
+            price = +priceList[item][key];
         }
     }
     return price;
@@ -33,7 +32,7 @@ function getQuantityInCart(item) {
     if (!(item in cart)) {
         return 0;
     }
-    return cart[item];
+    return +cart[item];
 }
 
 
@@ -50,6 +49,30 @@ function updateCartSum(f) {
         });
 }
 
+function updateDeliverySum(f) {
+    $.post("/getdelivery", {},
+        function(data, status) {
+            cartSum = +data;
+            $("#deliverySum").text(normalize(deliverySum));
+            if (f == undefined) {
+
+            } else {
+                f(data, status);
+            }
+        });
+}
+
+function updateTotalSum(f) {
+    $.post("/getdelivery", {},
+        function(data, status) {
+            totalSum = +data;
+            if (f == undefined) {
+
+            } else {
+                f(data, status);
+            }
+        });
+}
 
 function updateCart(async) {
     if (async == undefined) {
@@ -60,23 +83,21 @@ function updateCart(async) {
         cartSum = +result;
         $("#cartSum").text(normalize(cartSum));
     }});
+    $.ajax({url: "/getdelivery", async: async, type: "POST", success: function(result) {
+        deliverySum = +result;
+        $("#deliverySum").text(normalize(deliverySum));
+    }});
+    $.ajax({url: "/gettotal", async: async, type: "POST", success: function(result) {
+        totalSum = +result;
+    }});
     $.ajax({url: "/getcart", async: async, type: "POST", success: function(result) {
         cart = JSON.parse(result);
     }});
-    /*$.post("/getcartsum", {},
-        function(data, status) {
-            cartSum = +data;
-            $("#cartSum").text(normalize(cartSum));
-        });
-    $.post("/getcart", {},
-        function(data, status) {
-            cart = JSON.parse(data);
-        });*/
 }
 
 
 function setInCart(item, quantity, f) {
-    $.post("/setincart", 
+    $.post("/setincart",
         {
             "item" : item,
             "quantity" : quantity
@@ -93,7 +114,7 @@ function setInCart(item, quantity, f) {
 
 
 function addToCart(item, quantity, f) {
-     $.post("/addtocart", 
+     $.post("/addtocart",
         {
             "item" : item,
             "quantity" : quantity
