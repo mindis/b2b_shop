@@ -245,7 +245,7 @@ def makeOrder(request):
         else:
             cart = cart[0]
         cart.delZeroes()
-        return render(request, 'shop/customerinfo.html', {'cart': cart, 'DADATA_API_KEY': settings.DADATA_API_KEY})
+        return render(request, 'shop/customerinfo.html', {'cart': cart, 'DADATA_API_KEY': settings.DADATA_API_KEY, 'total' : (cart.getDelivery() + cart.getTotalSum())})
 
     inn = ''
     kpp = ''
