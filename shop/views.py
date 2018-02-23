@@ -232,7 +232,7 @@ def cart(request):
     else:
         cart = cart[0]
     cart.delZeroes()
-    return render(request, 'shop/cart.html', {'cart' : cart})
+    return render(request, 'shop/cart.html', {'cart' : cart, 'Delivery' : Delivery.objects.all()})
 
 
 def makeOrder(request):

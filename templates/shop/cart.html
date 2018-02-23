@@ -109,7 +109,30 @@
                 </tr>
                  <tr>
                     <th></th>
-                    <th>Доставка:</th>
+                    <th>
+                        <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены на доставку</h4>' data-html="true"
+                        data-content='
+                        <div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>стоимость товара</th>
+                                        <th>цена доставки</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for delivery in Delivery%}
+                                    <tr>
+                                        <th>{{delivery.minSum}} р</th>
+                                        <th>{{delivery.price}} р</th>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>' class="item-price" data-product="{{orderItem.product.slug}}">
+                            Доставка:
+                        </span>
+                    </th>
                     <th></th>
                     <th></th>
                     <th></th>
