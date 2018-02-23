@@ -28,6 +28,7 @@ class Product(models.Model):
     priority = models.IntegerField(default=0, blank=True)
     productClass = models.ManyToManyField('ProductClass', blank=True)
     measure = models.CharField(max_length=50, default='шт', blank=True)
+    available = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Product'
@@ -48,6 +49,7 @@ class ProductVariant(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, blank=True)
     quantity = models.IntegerField(default=0, blank=True)
     vendorCode = models.CharField(default=0, max_length=50, blank=True)
+    available = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'ProductVariant'
@@ -180,15 +182,15 @@ class SellerOrganisation(models.Model):
 
 
 class OrderItem(models.Model):
-    product = models.ForeignKey('ProductVariant', on_delete=models.CASCADE)
+    product = models.ForeignKey('ProductVariant', on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, blank=True)
     price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True) # price per one
-    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items', related_query_name='items', blank=True, null=True)
+    order = models.ForeignKey('Order', on_delete=models.SET_NULL, related_name='items', related_query_name='items', blank=True, null=True)
 
     class Meta:
         verbose_name = 'OrderItem'
         verbose_name_plural = 'OrderItems'
-        ordering = ['product']
+        #ordering = ['product']
 
     def __str__(self):
         return 'OrderItem:' + str(self.product) + ' ' + str(self.quantity)
@@ -198,16 +200,31 @@ class OrderItem(models.Model):
         return Decimal(self.price) * int(self.quantity)
 
 
+class OrderStatus(models.Model):
+    name = models.CharField(max_length=250, default='', blank=True)
+    color = models.CharField(max_length=200, default='', blank=True)
+
+    class Meta:
+        verbose_name = 'OrderStatus'
+        verbose_name_plural = 'OrderStatuses'
+        ordering = ['name']
+
+
+    def __str__(self):
+        return self.name + ' (' + self.color + ')'
+
+
 class Order(models.Model):
     datetime = models.DateTimeField(null=True, blank=True)
     #organisation = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey('auth.user', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.user', on_delete=models.SET_NULL, null=True)
     #items = models.ManyToManyField('OrderItem', blank=True)
-    active = models.BooleanField(default=False, blank=True)
-    finished = models.BooleanField(default=False, blank=True)
-    cancelled = models.BooleanField(default=False, blank=True)
+    #active = models.BooleanField(default=False, blank=True)
+    #finished = models.BooleanField(default=False, blank=True)
+    #cancelled = models.BooleanField(default=False, blank=True)
+    status = models.ForeignKey('OrderStatus', on_delete=models.SET_NULL, blank=True, null=True)
     sale = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
-    invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True, blank=True, parent_link=True)
+    invoice = models.OneToOneField('Invoice', on_delete=models.SET_NULL, null=True, blank=True, parent_link=True)
 
     class Meta:
         verbose_name = 'Order'
@@ -217,27 +234,28 @@ class Order(models.Model):
     def __str__(self):
         return 'Order:' + str(self.datetime)
         + ' by ' + str(self.organisation)
-        + ' active:' + str(self.active)
-        + ' finished:' + str(self.finished)
-        + ' cancelled:' + str(self.cancelled)
+        + ' status:' + str(self.status.name)
 
     def activate(self):
-        self.finished = False
-        self.active = True
-        self.cancelled = False
+        #self.finished = False
+        #self.active = True
+        #self.cancelled = False
+        self.status=OrderStatus.objects.get(pk=2)
         self.datetime = timezone.now()
         self.save()
 
     def finish(self):
-        self.finished = True
-        self.active = False
-        self.cancelled = False
+        #self.finished = True
+        #self.active = False
+        #self.cancelled = False
+        self.status=OrderStatus.objects.get(pk=3)
         self.save()
 
     def cancel(self):
-        self.finished = False
-        self.active = False
-        self.cancelled = True
+        #self.finished = False
+        #self.active = False
+        #self.cancelled = True
+        self.status=OrderStatus.objects.get(pk=4)
         self.save()
 
     def delZeroes(self):
@@ -343,19 +361,50 @@ class Order(models.Model):
     def applySale(self, sale):
         pass
 
+    def getDelivery(self):
+        sm = self.getTotalSum()
+        dSum = Decimal('inf');
+        # for is bad; I will replace it with reduce
+        for item in Delivery.objects.all():
+            if item.minSum <= sm:
+                dSum = min(dSum, item.price)
+        return dSum
+
+
+class Delivery(models.Model):
+    minSum = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+    price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+
+    class Meta:
+        verbose_name = 'Delivery'
+        verbose_name_plural = 'Delivery'
+        ordering = ['price']
+
+    def __str__(self):
+        return "delivery"
+
 
 class Invoice(models.Model):
     date = models.DateTimeField(null=True,blank=True)
-    seller = models.ForeignKey('SellerOrganisation', on_delete=models.CASCADE, null=True, blank=True, related_name='+')
-    customer = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
+    seller = models.ForeignKey('SellerOrganisation', on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    customer = models.ForeignKey('Organisation', on_delete=models.SET_NULL, null=True, blank=True)
     personInCharge = models.CharField(max_length=250, default='', blank=True)
     shipAddress = models.CharField(max_length=250, default='', blank=True)
     comment = models.TextField(default='', blank=True)
     taxes = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+    deliverySum = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
 
-    def calculateTaxes(self):
-        self.taxes = Decimal((self.order.getTotalSum() * Decimal(0.18) / Decimal(1.18)).quantize(Decimal('.01'), rounding=ROUND_CEILING))
+    def calculateDelivery(self):
+        self.deliverySum = self.order.getDelivery()
         self.save()
 
+    def calculateTaxes(self):
+        self.taxes = Decimal(((self.order.getTotalSum() + self.deliverySum) * Decimal(0.18) / Decimal(1.18)).quantize(Decimal('.01'), rounding=ROUND_CEILING))
+        self.save()
+
+    def recalc(self):
+        self.calculateDelivery()
+        self.calculateTaxes()
+
     def toPay(self):
-        return self.order.getTotalSum()
+        return self.order.getTotalSum() + self.deliverySum

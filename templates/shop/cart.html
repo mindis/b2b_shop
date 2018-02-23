@@ -3,7 +3,6 @@
 {% load l10n %}
 
 {% block head %}
-<title>Shop name: {{ item.name }}</title>
 <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 
 {% endblock %}
@@ -97,25 +96,36 @@
                         </th>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>Товаров на сумму:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th><span style="white-space: nowrap;" id="cart-total">0</span> р</th>
+                    <th></th>
+                    <th></th>
+                </tr>
                  <tr>
                     <th></th>
-                    <th>Скидка:</th>
+                    <th>Доставка:</th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th>0 р</th>
+                    <th><span id="delivery-sum">0</span> р</th>
                     <th></th>
                     <th></th>
                 </tr>
                 <tr>
                     <th></th>
-                    <th>Итог:</th>
+                    <th>Итого:</th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span style="white-space: nowrap;" id="cart-total"></span> р</th>
+                    <th><span style="white-space: nowrap;" id="total">0</span> р</th>
                     <th></th>
                     <th></th>
                 </tr>

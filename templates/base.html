@@ -17,6 +17,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" >
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" ></script>
         <script type="text/javascript" src="{% static 'js/lib.js' %}" ></script>
+        <title> shop name</title>
         {% block head %}
         {% endblock %}
     </head>
@@ -30,13 +31,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Shop name</a>
+              <a class="navbar-brand" href="/itemlist">Shop name</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li id="nav_homepage"><a href="/itemlist">Домашняя страница</a></li>
-                <li><a href="#">О магазине</a></li>
-                <li><a href="#">Контакты</a></li>
+                <li id="nav_homepage"><a href="/itemlist">Список товаров</a></li>
+                {% if user.is_authenticated%}
+                <li id="nav_myorders"><a href="/myorders">Мои заказы</a></li>
+                {% endif %}
+                <li id="nav_about"><a href="/about/#about">О магазине</a></li>
+                <li id="nav_contacts"><a href="/about/#contacts">Контакты</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li id="nav_cart"><a id="cartlink" data-content="" data-html="true" data-placement="bottom" href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Корзина <span id="cartSum">0</span> p.</a></li>
@@ -51,7 +55,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {% user_display request.user %}</a>
                     <ul class="dropdown-menu">
                       <li><a style="text-align: center;" href="/account/password_change">Сменить пароль</a></li>
-                      <li><a style="text-align: center;" href="/myorders">Мои заказы</a></li>
+                      <!--<li><a style="text-align: center;" href="/myorders">Мои заказы</a></li>-->
                       <li><a style="text-align: center;" href="/account/logout">Выход <span class="glyphicon glyphicon-log-in"></span></a></li>
                     </ul>
                 </li>
@@ -66,4 +70,9 @@
             {% endblock %}
         </div>
     </body>
+    <footer class="footer">
+        <div class="content">
+            
+        </div>
+    </footer>
 </html>

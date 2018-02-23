@@ -1,4 +1,6 @@
 var cartSum = 0;
+var deliverySum = 0;
+var totalSum = 0;
 var itemList = [];
 var priceList = {};
 var items = {};
@@ -7,6 +9,7 @@ var cart = {};
 function normalize(x) {
     return (+x).toFixed(2).toString().replace('.', ',').replace(/(\d{1,3}(?=(\d{3})+(?:\.\d|\b)))/g,"$1" + decodeURI('%E2%80%89'));
 }
+
 
 function getItemPrice(item, count) {
     if (!(item in priceList)) {
@@ -47,6 +50,30 @@ function updateCartSum(f) {
         });
 }
 
+function updateDeliverySum(f) {
+    $.post("/getdelivery", {},
+        function(data, status) {
+            deliverySum = +data;
+            $("#deliverySum").text(normalize(deliverySum));
+            if (f == undefined) {
+
+            } else {
+                f(data, status);
+            }
+        });
+}
+
+function updateTotalSum(f) {
+    $.post("/gettotal", {},
+        function(data, status) {
+            totalSum = +data;
+            if (f == undefined) {
+
+            } else {
+                f(data, status);
+            }
+        });
+}
 
 function updateCart(async) {
     if (async == undefined) {
@@ -56,6 +83,13 @@ function updateCart(async) {
     $.ajax({url: "/getcartsum", async: async, type: "POST", success: function(result) {
         cartSum = +result;
         $("#cartSum").text(normalize(cartSum));
+    }});
+    $.ajax({url: "/getdelivery", async: async, type: "POST", success: function(result) {
+        deliverySum = +result;
+        $("#deliverySum").text(normalize(deliverySum));
+    }});
+    $.ajax({url: "/gettotal", async: async, type: "POST", success: function(result) {
+        totalSum = +result;
     }});
     $.ajax({url: "/getcart", async: async, type: "POST", success: function(result) {
         cart = JSON.parse(result);

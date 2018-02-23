@@ -2,21 +2,17 @@ from django.contrib import admin
 from .models import ProductClass, Product, ProductVariant, \
                     SaleSum, SaleQuantity, Organisation, \
                     OrderItem, Order, Invoice, SellerOrganisation,\
-                    Price
+                    Price, OrderStatus, Delivery
 
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
-#admin.site.register(ProductVariant)
-#admin.site.register(SaleSum)
-#admin.site.register(SaleQuantity)
 admin.site.register(ProductClass)
-#admin.site.register(Product)
 admin.site.register(Organisation)
-#admin.site.register(OrderItem)
-#admin.site.register(Order)
-#admin.site.register(Invoice)
 admin.site.register(SellerOrganisation)
-#admin.site.register(Price)
+admin.site.register(OrderStatus)
+
+class DeliveryAdmin(SuperModelAdmin):
+    list_display = ('minSum', 'price')
 
 class PriceInline(SuperInlineModelAdmin, admin.TabularInline):
     model = Price
@@ -51,3 +47,4 @@ class ProductAdmin(SuperModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductVariant, ProductVariantAdmin)
 admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(Delivery, DeliveryAdmin)

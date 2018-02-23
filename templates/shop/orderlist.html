@@ -3,15 +3,17 @@
 {% load l10n %}
 
 {% block head %}
-<title>Мои заказы</title>
+<script>
+$(document).ready(function() {
+    $("#nav_myorders").attr("class", "active");
+});
+</script>
 {% endblock %}
 
 {% block content %}
-<div class="row" style="margin-bottom: 40px;">
-<h2>
+<h1>
     Заказы
-</h2>
-</div>
+</h1>
 <div class="row">
     <table class="table table-striped">
         <tr>
@@ -21,7 +23,6 @@
             <th>Покупатель</th>
             <th>Продавец</th>
             <th>Сумма</th>
-            <th>Налог</th>
             <th><th>
         </tr>
         {% for invoice in invoices %}
@@ -34,14 +35,10 @@
             </td>
             <td>
                 <strong>
-                    {% if invoice.order.active %}
-                        <span class="label label-success"> В процессе </span>
-                    {% endif %}
-                    {% if invoice.order.finished %}
-                        <span class="label label-primary"> Завершён </span>
-                    {% endif %}
-                    {% if invoice.order.cancelled %}
-                        <span class="label label-danger"> Отменен </span>
+                    {% if invoice.order.status %}
+                    <center>
+                        <span style="color: {{invoice.order.status.color}};"> {{invoice.order.status.name}} </span>
+                    </center>
                     {% endif %}
                 </strogn>
             </td>
@@ -52,11 +49,9 @@
                 {{invoice.seller.name}}
             </td>
             <td>
-                {{invoice.toPay|floatformat:2|localize}}
+                {{invoice.toPay|floatformat:2|localize}} р
             </td>
-            <td>
-                {{invoice.taxes|floatformat:2|localize}}
-            </td>
+
             <td>
                 <a type="button" class="btn btn-default" href="/getinvoicepdf?pk={{invoice.pk}}" target="_blank">
                     Скачать счет
