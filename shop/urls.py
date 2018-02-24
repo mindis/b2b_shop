@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^getinvoice', views.getInvoice, name='getInvoice'),
     url(r'^getdelivery', views.getDelivery, name='getDelivery'),
     url(r'^gettotal', views.getTotal, name='getTotal'),
-    #url(r'^getitemstored$', views.getItemStored, name='getItemStored'),
+    url(r'^getminordersum', views.getMinOrderSum, name='getMinOrderSum'),
+
     url(r'^endoforder/', views.endOfOrder, name='endOfOrder'),
     url(r'^myorders/', views.orderList, name='orderList'),
 
@@ -35,9 +36,7 @@ urlpatterns = [
     url(r'^itemlist/$', views.itemList, name='itemlist'),
     url(r'^itemlist/(?P<cls>\w+)', views.itemListSelection, name='itemlistselection'),
     url(r'^login/$',  RedirectView.as_view(pattern_name='account/login')),
-    #url(r'^logout', views.logoutUser, name='logoutUser'),
+
     url(r'^order/$', views.makeOrder, name='order'),
     url(r'^about/$', views.about, name='about')
-    #url(r'^registration', views.registerUser, name='registerUser'),
-    #url(r'^setcart', views.setCart, name='setCart')
 ]

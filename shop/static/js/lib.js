@@ -1,15 +1,15 @@
 var cartSum = 0;
 var deliverySum = 0;
 var totalSum = 0;
+var minOrderSum = 0;
 var itemList = [];
 var priceList = {};
 var items = {};
 var cart = {};
 
 function normalize(x) {
-    return (+x).toFixed(2).toString().replace('.', ',').replace(/(\d{1,3}(?=(\d{3})+(?:\.\d|\b)))/g,"$1" + decodeURI('%E2%80%89'));
+    return (+x).toFixed(2).toString().replace('.', ',').replace(/(\d{1,3}(?=(\d{3})+(?:\.\d|\b)))/g,"$1" + ('\u202F'));
 }
-
 
 function getItemPrice(item, count) {
     if (!(item in priceList)) {
@@ -53,7 +53,7 @@ function updateCartSum(f) {
 function updateDeliverySum(f) {
     $.post("/getdelivery", {},
         function(data, status) {
-            deliverySum = +data;
+            cartSum = +data;
             $("#deliverySum").text(normalize(deliverySum));
             if (f == undefined) {
 
@@ -64,7 +64,7 @@ function updateDeliverySum(f) {
 }
 
 function updateTotalSum(f) {
-    $.post("/gettotal", {},
+    $.post("/getdelivery", {},
         function(data, status) {
             totalSum = +data;
             if (f == undefined) {
@@ -149,20 +149,6 @@ function loadItems() {
         // /console.log(result);
         priceList = JSON.parse(result);
     }});
-    /*$.post("/getitemstored", {},
-        function(data, status) {
-            stored = JSON.parse(data);
-        });
-    $.post("/getitems", {},
-        function(data, status) {
-            itemList = JSON.parse(data);
-            itemList.forEach(function(item, index, arr) {
-                    $.post("/getitemprices", {'item' : item},
-                        function(data2, status2) {
-                            priceList[item] = JSON.parse(data2);
-                        });
-                });
-        });*/
 }
 
 
@@ -194,8 +180,12 @@ $(document).ready(function(){
     });
     // end of script
 
-    $('[data-toggle="popover"]').popover({trigger: "hover focus"});
+    $('[data-toggle="popover"]').popover({trigger: "hover focus click"});
     $('[data-toggle="tooltip"]').tooltip();
+
+    $.ajax({url: "/getminordersum", async: false, type: "POST", success: function(result) {
+        minOrderSum = +result;
+    }});
 
     loadItems();
     updateCart(false);

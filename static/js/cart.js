@@ -1,6 +1,25 @@
+var curState = "";
+
 function notify(text) {
     console.log(text);
     notifyCart(text);
+}
+
+
+function orderState() {
+    if (cartSum < minOrderSum) {
+        if (curState != "less") {
+            $("#ok").addClass("disabled");
+            $("#ok-span").popover("show");
+        }
+        curState = "less";
+    } else {
+        if (curState != "greater") {
+            $("#ok").removeClass("disabled");
+            $("#ok-span").popover("hide");
+        }
+        curState = "greater";
+    }
 }
 
 function update(item) {
@@ -9,9 +28,10 @@ function update(item) {
 	$(".item-sum[data-product=" + item + "]").text(normalize(getItemPrice(item, q) * q));
 	updateCartSum(function() {
 		$("#cart-total").text(normalize(cartSum));
+        orderState();
 	});
     updateDeliverySum(function(){
-        $("#delivery-sum").text(normalize(cartSum));
+        $("#delivery-sum").text(normalize(deliverySum));
     });
     updateTotalSum(function(){
         $("#total").text(normalize(totalSum));
@@ -19,7 +39,10 @@ function update(item) {
 }
 
 $(document).ready(function() {
+    $('#ok-span').popover({trigger: ""});
 	$("#nav_cart").attr("class", "active");
+    $("#ok-span").attr("data-content", "Минимальная сумма заказа " + normalize(minOrderSum) + "р. ");
+    orderState();
 
 	$(".item-del").click(function() {
 		var item = $(this).attr("data-product");
