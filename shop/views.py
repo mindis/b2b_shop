@@ -185,6 +185,9 @@ def getItemQuantityInCart(request):
         return HttpResponse('error')
 
 
+def getMinOrderSum(request):
+    return HttpResponse(ShopConstant.getMinOrderSum())
+
 #------------ Views (HTML/PDF)
 
 def orderList(request):
@@ -232,7 +235,7 @@ def cart(request):
     else:
         cart = cart[0]
     cart.delZeroes()
-    return render(request, 'shop/cart.html', {'cart' : cart})
+    return render(request, 'shop/cart.html', {'cart' : cart, 'Delivery' : Delivery.objects.all()})
 
 
 def makeOrder(request):
@@ -245,7 +248,9 @@ def makeOrder(request):
         else:
             cart = cart[0]
         cart.delZeroes()
-        return render(request, 'shop/customerinfo.html', {'cart': cart, 'DADATA_API_KEY': settings.DADATA_API_KEY})
+        if not cart.checkOrder():
+            return HttpResponse('total sum is too low')
+        return render(request, 'shop/customerinfo.html', {'cart': cart, 'DADATA_API_KEY': settings.DADATA_API_KEY, 'total' : (cart.getDelivery() + cart.getTotalSum())})
 
     inn = ''
     kpp = ''
@@ -279,6 +284,9 @@ def makeOrder(request):
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
         )[0]
+
+    if not cart.checkOrder():
+        return HttpResponse('total sum is too low')
 
     if request.user not in org.owners.all():
         org.owners.add(request.user)

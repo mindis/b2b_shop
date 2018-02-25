@@ -120,21 +120,32 @@ $(document).ready(function() {
                         </th>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Товаров на сумму:</th>
+
+                    <th></th>
+                    <th></th>
+                    <th><span style="white-space: nowrap;" id="cart-total">{{cart.getTotalSum}}</span> р</th>
+                </tr>
                  <tr>
                     <th></th>
-                    <th>Скидка:</th>
+                    <th></th>
+                    <th>Доставка:</th>
+
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th style="white-space: nowrap;"> {{cart.sale}} р</th>
+                    <th><span id="delivery-sum">{{cart.getDelivery}}</span> р</th>
                 </tr>
                 <tr>
                     <th></th>
-                    <th>Итог:</th>
+                    <th></th>
+                    <th>Итого:</th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th><span style="white-space: nowrap;" id="cart-total"></span> р</th>
+                    <th><span style="white-space: nowrap;" id="total">{{total}}</span> р</th>
+
                 </tr>
             <tbody/>
         </table>

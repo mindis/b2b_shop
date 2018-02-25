@@ -370,6 +370,12 @@ class Order(models.Model):
                 dSum = min(dSum, item.price)
         return dSum
 
+    def checkOrder(self):
+        '''
+        checks if order sum is enough to make order
+        '''
+        return self.getTotalSum() >= ShopConstant.getMinOrderSum()
+
 
 class Delivery(models.Model):
     minSum = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
@@ -408,3 +414,18 @@ class Invoice(models.Model):
 
     def toPay(self):
         return self.order.getTotalSum() + self.deliverySum
+
+
+class ShopConstant(models.Model):
+    name = models.CharField(max_length=140, default='', unique=True)
+    value = models.CharField(max_length=140, default='')
+    comment = models.CharField(max_length=200, default='')
+
+    def getField(fieldName):
+        return ShopConstant.objects.get(name=fieldName).value
+
+    def getShopName():
+        return ShopConstant.getField('shopname')
+
+    def getMinOrderSum():
+        return Decimal(ShopConstant.getField('minordersum'))
