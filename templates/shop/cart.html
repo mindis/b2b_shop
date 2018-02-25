@@ -124,7 +124,7 @@
                                     {% for delivery in Delivery%}
                                     <tr>
                                         <th>{{delivery.minSum}} р</th>
-                                        <th>{{delivery.price}} р</th>
+                                        <th>{% if delivery.price != 0 %} {{delivery.price}}&nbsp;р {% else %} Бесплатно{% endif %}</th>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -137,7 +137,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span id="delivery-sum">0</span>&nbsp;р</th>
+                    <th><span id="delivery-sum">0&nbsp;р</span></th>
                     <th></th>
                     <th></th>
                 </tr>

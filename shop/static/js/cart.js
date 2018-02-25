@@ -31,7 +31,11 @@ function update(item) {
         orderState();
 	});
     updateDeliverySum(function(){
-        $("#delivery-sum").text(normalize(deliverySum));
+        if (deliverySum == 0) {
+            $("#delivery-sum").text("Бесплатно");
+        } else {
+            $("#delivery-sum").text(normalize(deliverySum) + "\u202Fр");
+        }
     });
     updateTotalSum(function(){
         $("#total").text(normalize(totalSum));
