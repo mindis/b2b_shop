@@ -24,8 +24,8 @@ function orderState() {
 
 function update(item) {
 	var q = parseInt($(".item-quantity[data-product=" + item + "]").val());
-	$(".item-price[data-product=" + item + "]").text(normalize(getItemPrice(item, q)));
-	$(".item-sum[data-product=" + item + "]").text(normalize(getItemPrice(item, q) * q));
+	$(".item-price[data-product=" + item + "]").text(normalize(getItemPrice(item, q)) + "\u202Fр");
+	$(".item-sum[data-product=" + item + "]").text(normalize(getItemPrice(item, q) * q) + "\u202Fр");
 	updateCartSum(function() {
 		$("#cart-total").text(normalize(cartSum));
         orderState();
