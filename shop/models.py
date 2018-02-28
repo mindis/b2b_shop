@@ -68,6 +68,27 @@ class ProductVariant(models.Model):
                 mnCount = price.quantity
         return mn
 
+    def updateQuantities(filename):
+        startProducts = 6
+        wb = xlrd.open_workbook(filename)
+        sheet = wb.sheets()[0]
+
+        updatedItems = []
+
+        for rn in range(startProducts, sheet.nrows - 1):
+            row = sheet.row_values(rn)
+            cur_vendorCode = row[2]
+            cur_quantity = row[4]
+            try:
+                product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
+            except Exception:
+                raise Exception('product variant with vendorCode=' + cur_vendorCode + 'not found.\nAdd product variant to database before loading file.')
+
+            product.quantity = cur_quantity
+            product.save()
+            updatedItems.append({'vendorCode' : product.vendorCode, 'quantity' : produce.quantity})
+        return updatedItems
+
 
 class Price(models.Model):
     price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)

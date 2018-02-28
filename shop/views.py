@@ -16,6 +16,7 @@ import pdfkit
 import shop.forms
 import account.forms
 import account.views
+import xlrd
 
 # methods returning JSON or string/int/decimal
 
@@ -363,3 +364,10 @@ class SignupView(account.views.SignupView):
 
     def after_signup(self, form):
         super(SignupView, self).after_signup(form)
+
+# admin
+
+def adminUploadQuantities(request):
+    if not request.user.is_superuser:
+        return HttpResponse('###')
+    return render(request, 'shop/admin-update-quantities.html', {})
