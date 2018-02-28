@@ -10,6 +10,7 @@ Built With
 * [Python3](https://www.python.org/)
 * [Django](https://www.djangoproject.com/)
 * [django-user-accounts](https://github.com/pinax/django-user-accounts)
+* [Pinax Bootstrap Theme](https://github.com/pinax/pinax-theme-bootstrap)
 * [wkhtmltopdf](https://wkhtmltopdf.org)
 * [pdfkit](https://pypi.python.org/pypi/pdfkit)
 * [num2words](https://pypi.python.org/pypi/num2words/)
