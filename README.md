@@ -1,5 +1,5 @@
 # b2b_shop
-Internet shop for b2b wholesale trades. Written in Python3 using Django framework and many other libraries.
+Internet shop for b2b wholesale trade. Written in Python3 using Django framework and many other libraries.
 
 ##
 This shop was built for wholesale trades with a not big amount of types of products.
