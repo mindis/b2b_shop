@@ -1,12 +1,13 @@
 # b2b_shop
 Internet shop for b2b wholesale trade. Written in Python3 using Django framework and many other libraries.
 
-##
-This shop was built for wholesale trades with a not big amount of types of products.
-After making an order you will immediately get an invoice in pdf format.
+## Futures
+* Prices depend on quantity.
+* After making an order you will immediately get an invoice in pdf format.
+* You have a list of your previous orders with custom statuses.
+* You can update quantities by uploading xls file from 1C.
 
-##
-Built With
+## Built With
 * [Python3](https://www.python.org/)
 * [Django](https://www.djangoproject.com/)
 * [django-user-accounts](https://github.com/pinax/django-user-accounts)
@@ -15,9 +16,9 @@ Built With
 * [pdfkit](https://pypi.python.org/pypi/pdfkit)
 * [num2words](https://pypi.python.org/pypi/num2words/)
 * [Suggestions by DaData.ru](https://dadata.ru/suggestions/)
+* [xlrd](https://github.com/python-excel/xlrd)
 
-##
-Screenshots
+## Screenshots
 ![pricelist](screenshots/pricelist.png)
 ![addtocart](screenshots/addcart.png)
 ![cart](screenshots/cart.png)
