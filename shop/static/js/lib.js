@@ -64,7 +64,7 @@ function updateDeliverySum(f) {
 }
 
 function updateTotalSum(f) {
-    $.post("/getdelivery", {},
+    $.post("/gettotal", {},
         function(data, status) {
             totalSum = +data;
             if (f == undefined) {

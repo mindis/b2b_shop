@@ -91,20 +91,28 @@
 						<td style="text-align: right;">{{orderItem.getSum|floatformat:2|localize}}&thinsp;</td>
 					</tr>
 					{% endfor %}
+					<tr>
+						<td style="text-align: center;"> {{invoice.order.items.all|length|add:1}}</td>
+						<td style="text-align: left;">Доставка</td>
+						<td style="text-align: right;">1&thinsp;</td>
+						<td style="text-align: left;"></td>
+						<td style="text-align: right;">{{invoice.deliverySum|floatformat:2|localize}}&thinsp;</td>
+						<td style="text-align: right;">{{invoice.deliverySum|floatformat:2|localize}}&thinsp;</td>
+					</tr>
 					<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<th class="noborder" colspan="2" style="text-align: right;">Итого:</th>
-						<th class="noborder" style="text-align: right;">{{invoice.order.getTotalSum|floatformat:2|localize}}</th>
+						<th class="noborder" style="text-align: right;">{{invoice.toPay|floatformat:2|localize}}</th>
 					</tr>
-					<tr class="noborder">
+					<!--<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<th class="noborder" colspan="2" style="text-align: right;">Доставка:</th>
 						<th class="noborder" style="text-align: right;">{{invoice.deliverySum|floatformat:2|localize}}</th>
-					</tr>
+					</tr>-->
 					<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>

@@ -2,6 +2,10 @@ from django import template
 
 register = template.Library()
 
+@register.filter(name='getByKey')
+def getByKey(d, key):
+    return d.get(key)
+
 #func from https://stackoverflow.com/questions/401025/define-css-class-in-django-forms/41129192#41129192
 @register.filter(name='addclass')
 def addclass(field, given_class):

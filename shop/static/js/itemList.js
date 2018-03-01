@@ -29,12 +29,12 @@ function update(product, tag) {
 	var q = +($(".quantity-selector[data-product=" + product + "][data-tag=" + tag + "]").val());
 	var item = $(".variant-selector[data-product=" + product + "][data-tag=" + tag + "] :selected").val();
     console.log(item, q, getQuantityInCart(item), getItemPrice(item, q + getQuantityInCart(item)));
-	$(".item-price[data-product=" + product + "][data-tag=" + tag + "]").text(normalize(getItemPrice(item, q + getQuantityInCart(item))));
+	$(".item-price[data-product=" + product + "][data-tag=" + tag + "]").text(normalize(getItemPrice(item, q + getQuantityInCart(item))) + "\u202Fр");
 
 	$(".item-count[data-product=" + product + "][data-tag=" + tag + "]").text(items[item].quantity);
 
 	$(".product-sum[data-product=" + product + "][data-tag=" + tag + "]").text(
-		normalize(getItemPrice(item, q + getQuantityInCart(item)) * q) + " р");
+		normalize(getItemPrice(item, q + getQuantityInCart(item)) * q) + "\u202Fр");
     //updatePricelist(product, tag);
 	//console.log(stored[item], item)
 }

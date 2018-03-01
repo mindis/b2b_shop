@@ -7,6 +7,16 @@
 <script>
 $(document).ready(function() {
     $("#nav_homepage").attr("class", "active");
+    {% for tag in productClasses %}
+        $("#search_{{tag.slug}}").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tbody_{{tag.slug}} tr").filter(function() {
+              $(this).toggle(
+                  $(this).attr("data-search-keywords").toLowerCase().indexOf(value) > - 1
+              );
+            });
+        });
+    {% endfor %}
 });
 </script>
 {% endblock %}
@@ -28,6 +38,9 @@ $(document).ready(function() {
         {% for tag in productClasses %}
             <div id="{{ tag.slug }}" {% if tag.slug == cls %}
             class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
+                <p>
+                    <input style="margin-top:10px;" class="form-control" id="search_{{tag.slug}}" type="text" placeholder="Поиск..">
+                </p>
                 <div class="table-responsive">
                      <table class="table table-striped">
                         <thead>
@@ -36,16 +49,16 @@ $(document).ready(function() {
                             <th>Наименование</th>
                             <th>Вариант</th>
                             <th>цена</th>
-                            <th>на складе</th>
+                            <th>на&nbsp;складе</th>
                             <th>количество</th>
-                            <th>ед измерения</th>
+                            <th>ед.&nbsp;измерения</th>
                             <th>сумма</th>
                             <th></th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody_{{tag.slug}}">
                             {% for product in tag.product_set.all %}
-                                <tr>
+                                <tr data-search-keywords="{{product.name}}:{{product.slug}}:{% for item in product.productvariant_set.all %}{{item.addition}}:{% endfor %}">
                                     <th>
                                         <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
                                     </th>
@@ -100,7 +113,7 @@ $(document).ready(function() {
                                         {{product.measure}}
                                     </th>
                                     <th>
-                                        <span data-tag="{{tag.slug}}" style="white-space: nowrap;" data-product="{{product.slug}}" class="product-sum" id="sm_{{ product.slug }}_{{tag.slug}}">0 р</span>
+                                        <span data-tag="{{tag.slug}}" style="white-space: nowrap;" data-product="{{product.slug}}" class="product-sum" id="sm_{{ product.slug }}_{{tag.slug}}">0&nbsp;р</span>
                                     </th>
                                     <th>
                                         <button data-tag="{{tag.slug}}" data-content="" data-placement="top" data-product="{{product.slug}}" id="btn_{{ product.slug }}_{{tag.slug}}" type="button" class="btn btn-success btn-add-cart">Добавить в корзину

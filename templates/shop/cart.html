@@ -71,7 +71,7 @@
                                     </tbody>
                                 </table>
                             </div>' class="item-price" data-product="{{orderItem.product.slug}}">
-                            {{orderItem.price}} p
+                            {{orderItem.price}}&nbsp;p
                             </span>
                         </th>
                         <th>
@@ -84,7 +84,7 @@
                             {{orderItem.product.product.measure}}
                         </th>
                         <th>
-                            <span style="white-space: nowrap;" class="item-sum" data-product="{{orderItem.product.slug}}" id="sm_{{orderItem.pk}}">0 р</span>
+                            <span style="white-space: nowrap;" class="item-sum" data-product="{{orderItem.product.slug}}" id="sm_{{orderItem.pk}}">0&nbsp;р</span>
                         </th>
                         <!--<th>
                             <button id="btn_upd_{{orderItem.pk}}" type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Нажмите кнопку, чтобы изменить количество товаров.">обновить количество
@@ -103,7 +103,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span style="white-space: nowrap;" id="cart-total">0</span> р</th>
+                    <th><span style="white-space: nowrap;" id="cart-total">0</span>&nbsp;р</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -124,7 +124,7 @@
                                     {% for delivery in Delivery%}
                                     <tr>
                                         <th>{{delivery.minSum}} р</th>
-                                        <th>{{delivery.price}} р</th>
+                                        <th>{% if delivery.price != 0 %} {{delivery.price}}&nbsp;р {% else %} Бесплатно{% endif %}</th>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -137,7 +137,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span id="delivery-sum">0</span> р</th>
+                    <th><span id="delivery-sum">0&nbsp;р</span></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -148,7 +148,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span style="white-space: nowrap;" id="total">0</span> р</th>
+                    <th><span style="white-space: nowrap;" id="total">0</span>&nbsp;р</th>
                     <th></th>
                     <th></th>
                 </tr>
