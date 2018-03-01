@@ -3,6 +3,7 @@ from functools import reduce
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+import xlrd
 
 
 class ProductClass(models.Model):
@@ -10,6 +11,7 @@ class ProductClass(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(default='', blank=True)
     priority = models.IntegerField(default=0, blank=True)
+    available = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'ProductClass'
@@ -68,26 +70,35 @@ class ProductVariant(models.Model):
                 mnCount = price.quantity
         return mn
 
-    def updateQuantities(filename):
+    def updateQuantitiesXls(filename):
         startProducts = 6
         wb = xlrd.open_workbook(filename)
         sheet = wb.sheets()[0]
 
         updatedItems = []
+        errors = []
 
         for rn in range(startProducts, sheet.nrows - 1):
             row = sheet.row_values(rn)
-            cur_vendorCode = row[2]
-            cur_quantity = row[4]
+            cur_vendorCode = str(row[2])
+            cur_quantity = int(row[4])
+
             try:
                 product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
+                product.quantity = cur_quantity
+                product.save()
+                updatedItems.append({
+                                    'vendorCode' : product.vendorCode,
+                                    'name_in_file' : str(row[0]),
+                                    'name_in_db' : product.name,
+                                    'quantity' : product.quantity
+                                    })
             except Exception:
-                raise Exception('product variant with vendorCode=' + cur_vendorCode + 'not found.\nAdd product variant to database before loading file.')
-
-            product.quantity = cur_quantity
-            product.save()
-            updatedItems.append({'vendorCode' : product.vendorCode, 'quantity' : produce.quantity})
-        return updatedItems
+                errors.append({
+                            'vendorCode' : cur_vendorCode,
+                            'name_in_file' : str(row[0])
+                            })
+        return updatedItems, errors
 
 
 class Price(models.Model):
@@ -237,12 +248,7 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
     datetime = models.DateTimeField(null=True, blank=True)
-    #organisation = models.ForeignKey('Organisation', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey('auth.user', on_delete=models.SET_NULL, null=True)
-    #items = models.ManyToManyField('OrderItem', blank=True)
-    #active = models.BooleanField(default=False, blank=True)
-    #finished = models.BooleanField(default=False, blank=True)
-    #cancelled = models.BooleanField(default=False, blank=True)
     status = models.ForeignKey('OrderStatus', on_delete=models.SET_NULL, blank=True, null=True)
     sale = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
     invoice = models.OneToOneField('Invoice', on_delete=models.SET_NULL, null=True, blank=True, parent_link=True)

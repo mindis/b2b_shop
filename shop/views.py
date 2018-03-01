@@ -355,6 +355,7 @@ def about(request):
 class LoginView(account.views.LoginView):
     form_class = account.forms.LoginEmailForm
 
+
 class SignupView(account.views.SignupView):
     form_class =  shop.forms.SignupForm
 
@@ -370,4 +371,21 @@ class SignupView(account.views.SignupView):
 def adminUploadQuantities(request):
     if not request.user.is_superuser:
         return HttpResponse('###')
-    return render(request, 'shop/admin-update-quantities.html', {})
+
+    if request.method == 'POST':
+        form = shop.forms.UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            updated, errors = ProductVariant.updateQuantitiesXls('files/quantity/' + request.FILES['file'].name)
+
+
+            return render(request, 'admin/admin-update-quantities.html', {'updated': updated, 'errors' : errors})
+    else:
+        form = shop.forms.UploadFileForm()
+    return render(request, 'admin/admin-update-quantities.html', {'form': form})
+
+
+def handle_uploaded_file(f):
+    with open('files/quantity/' + f.name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
