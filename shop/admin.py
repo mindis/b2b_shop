@@ -23,7 +23,9 @@ class PriceInline(SuperInlineModelAdmin, admin.TabularInline):
 
 class ProductVariantAdmin(SuperModelAdmin):
     inlines = [PriceInline,]
-    list_display = ('name', 'slug', 'vendorCode', 'quantity')
+    list_display = ('name', 'slug', 'vendorCode', 'quantity', 'available')
+    list_filter = ('available', 'product__productClass', 'product',)
+    search_fields = ['name', 'slug']
 
 class OrderItemInline(SuperInlineModelAdmin, admin.TabularInline):
     model = OrderItem
@@ -37,6 +39,8 @@ class OrderInline(SuperInlineModelAdmin, admin.StackedInline):
 class InvoiceAdmin(SuperModelAdmin):
     inlines = [OrderInline,]
     list_display = ('pk', 'date', 'seller', 'customer', 'toPay')
+    list_filter = ('order__status', 'seller', 'customer',)
+    search_fields = ['seller__name', 'customer__name']
 
 class ProductVariantInline(SuperInlineModelAdmin, admin.TabularInline):
     #inlines = [PriceInline,]
@@ -45,7 +49,9 @@ class ProductVariantInline(SuperInlineModelAdmin, admin.TabularInline):
 
 class ProductAdmin(SuperModelAdmin):
     inlines = [ProductVariantInline,]
-    list_display = ('pk', 'name', 'slug')
+    list_display = ('pk', 'name', 'slug', 'available')
+    list_filter = ('available', 'productClass',)
+    search_fields = ['name', 'slug']
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductVariant, ProductVariantAdmin)

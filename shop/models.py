@@ -190,7 +190,7 @@ class Organisation(models.Model):
         ordering = ['inn']
 
     def __str__(self):
-        return 'Organisation:' + str(self.name) + '(' + str(self.inn) + ')'
+        return str(self.name) + '(' + str(self.inn) + ')'
 
 
 class SellerOrganisation(models.Model):
@@ -210,7 +210,7 @@ class SellerOrganisation(models.Model):
         ordering = ['inn']
 
     def __str__(self):
-        return 'SellerOrganisation:' + str(self.name) + '(' + str(self.inn) + ')'
+        return 'Seller: ' + str(self.name) + '(' + str(self.inn) + ')'
 
 
 class OrderItem(models.Model):
