@@ -287,6 +287,7 @@ class Order(models.Model):
 
     def delZeroes(self):
         self.items.remove(*self.items.filter(quantity=0))
+        self.items.remove(*self.items.filter(product__available=False))
         self.save()
 
     def getItemByProduct(self, product):

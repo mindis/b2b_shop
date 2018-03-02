@@ -8,14 +8,16 @@
 $(document).ready(function() {
     $("#nav_homepage").attr("class", "active");
     {% for tag in productClasses %}
-        $("#search_{{tag.slug}}").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tbody_{{tag.slug}} tr").filter(function() {
-              $(this).toggle(
-                  $(this).attr("data-search-keywords").toLowerCase().indexOf(value) > - 1
-              );
+        {% if tag.available %}
+            $("#search_{{tag.slug}}").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tbody_{{tag.slug}} tr").filter(function() {
+                  $(this).toggle(
+                      $(this).attr("data-search-keywords").toLowerCase().indexOf(value) > - 1
+                  );
+                });
             });
-        });
+        {% endif %}
     {% endfor %}
 });
 </script>
@@ -26,16 +28,19 @@ $(document).ready(function() {
 
     <ul class="nav nav-tabs">
         {% for tag in productClasses %}
+            {% if tag.available %}
             <li {% if tag.slug == cls %}class="active"{% endif %}>
                 <a data-toggle="tab" href="#{{tag.slug}}">
                     {{ tag.name }}
-                    <span class="badge">{{ tag.product_set.all|length }}</span>
+                    <!--<span class="badge">{{ tag.product_set.all|length }}</span>-->
                 </a>
             </li>
+            {% endif %}
         {% endfor %}
     </ul>
     <div class="tab-content">
         {% for tag in productClasses %}
+            {% if tag.available %}
             <div id="{{ tag.slug }}" {% if tag.slug == cls %}
             class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
                 <p>
@@ -58,6 +63,7 @@ $(document).ready(function() {
                         </thead>
                         <tbody id="tbody_{{tag.slug}}">
                             {% for product in tag.product_set.all %}
+                                {% if product.available %}
                                 <tr data-search-keywords="{{product.name}}:{{product.slug}}:{% for item in product.productvariant_set.all %}{{item.addition}}:{% endfor %}">
                                     <th>
                                         <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
@@ -74,15 +80,19 @@ $(document).ready(function() {
                                                     <h4>Варианты:</h4>
                                                     <ul>
                                                         {% for item in product.productvariant_set.all %}
+                                                        {% if item.available %}
                                                         <li>
                                                         {{item.addition}}
                                                         </li>
+                                                        {% endif %}
                                                         {% endfor %}
                                                     <ul>
                                                 </div>
                                                 <div>
                                                     {% for pclass in product.productClass.all %}
+                                                        {% if pclass.available %}
                                                         <a href="itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
+                                                        {% endif %}
                                                     {% endfor%}
                                                 </div>'>
                                                 {{ product.name }}
@@ -92,7 +102,9 @@ $(document).ready(function() {
                                     <th>
                                         <select class="form-control variant-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="selection_{{ product.slug }}_{{tag.slug}}">
                                             {% for item in product.productvariant_set.all %}
-                                                <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
+                                                {% if item.available %}
+                                                    <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </th>
@@ -120,11 +132,13 @@ $(document).ready(function() {
                                         </button>
                                     </th>
                                 </tr>
+                                {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
 
     </div>

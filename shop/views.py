@@ -101,6 +101,7 @@ def addToCart(request):
                 if (item.quantity < cart.getQuantity(item) + pQuantity):
                     return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, cart.getQuantity(item) + pQuantity)
+                cart.delZeroes()
                 return HttpResponse('ok')
         else:
             return HttpResponse('error')
@@ -125,6 +126,7 @@ def setInCart(request):
                 if (item.quantity < pQuantity):
                     return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, pQuantity)
+                cart.delZeroes()
                 return HttpResponse('ok')
         else:
             return HttpResponse('error')
@@ -139,6 +141,7 @@ def getCartSum(request):
     if len(cart) == 0:
         return HttpResponse(0)
     cart = cart[0]
+    cart.delZeroes()
     return HttpResponse(cart.getTotalSum())
 
 
@@ -149,6 +152,7 @@ def getDelivery(request):
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
         )[0]
+    cart.delZeroes()
     return HttpResponse(cart.getDelivery())
 
 
@@ -159,6 +163,7 @@ def getTotal(request):
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
         )[0]
+    cart.delZeroes()
     return HttpResponse(cart.getDelivery() + cart.getTotalSum())
 
 
@@ -178,6 +183,7 @@ def getItemQuantityInCart(request):
                     cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
                 else:
                     cart = cart[0]
+                cart.delZeroes()
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
                 return HttpResponse( cart.getQuantity(item))
         else:
@@ -285,6 +291,7 @@ def makeOrder(request):
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
         )[0]
+    cart.delZeroes()
 
     if not cart.checkOrder():
         return HttpResponse('total sum is too low')
@@ -344,6 +351,8 @@ def endOfOrder(request):
 
 def itemPage(request, itemSlug):
     item = get_object_or_404(Product.objects, slug=itemSlug)
+    if not item.available:
+        return HttpResponse('Product ' + item.slug + ' is not available now.')
     return render(request, 'shop/itemPage.html', {'item' : item})
 
 
