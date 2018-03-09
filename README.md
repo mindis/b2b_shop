@@ -7,6 +7,11 @@ Internet shop for b2b wholesale trade. Written in Python3 using Django framework
 * You have a list of your previous orders with custom statuses.
 * You can update quantities by uploading xls file from 1C.
 
+## Problems
+* Views should be classes, not functions.
+* Taxes are hardcoded. I will add special models for taxes calculation later (formulas like "$TOTALSUM * 0.18 + $DELIVERY * 0.06").
+* Maybe I should use [django-bootstrap](https://github.com/dyve/django-bootstrap3).
+
 ## Built With
 * [Python3](https://www.python.org/)
 * [Django](https://www.djangoproject.com/)
