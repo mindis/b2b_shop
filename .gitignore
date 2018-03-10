@@ -5,11 +5,10 @@ quantity/
 # Created by https://www.gitignore.io/api/visualstudio,visualstudiocode
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
 .history
 
 ### VisualStudio ###

@@ -81,7 +81,7 @@ class ProductVariant(models.Model):
         for rn in range(startProducts, sheet.nrows - 1):
             row = sheet.row_values(rn)
             cur_vendorCode = str(row[2])
-            cur_quantity = int(row[4])
+            cur_quantity = int(row[3])
 
             try:
                 product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
