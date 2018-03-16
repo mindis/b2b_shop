@@ -11,7 +11,7 @@ Internet shop for b2b wholesale trade. Written in Python3 using Django framework
 * Views should be classes, not functions.
 * Taxes are hardcoded. I will add special models for taxes calculation later (formulas like "$TOTALSUM * 0.18 + $DELIVERY * 0.06").
 * Project needs more tests.
-* Maybe I should use [django-bootstrap](https://github.com/dyve/django-bootstrap3).
+* Maybe I should use [django-bootstrap](https://github.com/dyve/django-bootstrap3) and [django REST framework](http://www.django-rest-framework.org/). 
 
 ## Built With
 * [Python3](https://www.python.org/)
