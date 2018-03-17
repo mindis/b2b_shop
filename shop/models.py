@@ -25,7 +25,7 @@ class ProductClass(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
-    image = models.ImageField(default="nophoto.png")
+    image = models.ImageField(default="nophoto.png", blank=True)
     description = models.TextField(default='', blank=True)
     priority = models.IntegerField(default=0, blank=True)
     productClass = models.ManyToManyField('ProductClass', blank=True)
@@ -47,7 +47,7 @@ class ProductVariant(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(default='', blank=True)
     priority = models.IntegerField(default=0, blank=True)
-    image = models.ImageField(default="nophoto.png")
+    image = models.ImageField(default="nophoto.png", blank=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, blank=True)
     quantity = models.IntegerField(default=0, blank=True)
     vendorCode = models.CharField(default=0, max_length=50, blank=True)
@@ -81,7 +81,7 @@ class ProductVariant(models.Model):
         for rn in range(startProducts, sheet.nrows - 1):
             row = sheet.row_values(rn)
             cur_vendorCode = str(row[2])
-            cur_quantity = int(row[4])
+            cur_quantity = int(row[3])
 
             try:
                 product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
@@ -190,7 +190,7 @@ class Organisation(models.Model):
         ordering = ['inn']
 
     def __str__(self):
-        return 'Organisation:' + str(self.name) + '(' + str(self.inn) + ')'
+        return str(self.name) + '(' + str(self.inn) + ')'
 
 
 class SellerOrganisation(models.Model):
@@ -210,7 +210,7 @@ class SellerOrganisation(models.Model):
         ordering = ['inn']
 
     def __str__(self):
-        return 'SellerOrganisation:' + str(self.name) + '(' + str(self.inn) + ')'
+        return 'Seller: ' + str(self.name) + '(' + str(self.inn) + ')'
 
 
 class OrderItem(models.Model):
@@ -287,6 +287,7 @@ class Order(models.Model):
 
     def delZeroes(self):
         self.items.remove(*self.items.filter(quantity=0))
+        self.items.remove(*self.items.filter(product__available=False))
         self.save()
 
     def getItemByProduct(self, product):
@@ -456,3 +457,6 @@ class ShopConstant(models.Model):
 
     def getMinOrderSum():
         return Decimal(ShopConstant.getField('minordersum'))
+
+    def getOrderInfoMail():
+        return ShopConstant.getField('orderinfomail')

@@ -7,6 +7,7 @@ Django==2.0.2
 django-appconf==1.0.2
 django-super-inlines==0.1.4
 django-user-accounts==2.0.3
+et-xmlfile==1.0.1
 extras==0.0.3
 fixtures==2.0.0
 Flask==0.11.1
@@ -26,12 +27,14 @@ html5lib==1.0b10
 htmlmin==0.1.12
 httplib2==0.10.3
 itsdangerous==0.24
+jdcal==1.3
 Jinja2==2.7.3
 linecache2==1.0.0
 Mako==1.0.7
 MarkupSafe==0.23
 num2words==0.5.6
 olefile==0.44
+openpyxl==2.5.0
 passlib==1.6.2
 pbr==1.9.1
 pdfkit==0.6.1
@@ -59,3 +62,4 @@ webencodings==0.5.1
 Werkzeug==0.9.6
 WTForms==2.0.2
 xhtml2pdf==0.2b1
+xlrd==1.1.0
