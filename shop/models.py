@@ -25,7 +25,7 @@ class ProductClass(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
-    image = models.ImageField(default="nophoto.png")
+    image = models.ImageField(default="nophoto.png", blank=True)
     description = models.TextField(default='', blank=True)
     priority = models.IntegerField(default=0, blank=True)
     productClass = models.ManyToManyField('ProductClass', blank=True)
@@ -47,7 +47,7 @@ class ProductVariant(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(default='', blank=True)
     priority = models.IntegerField(default=0, blank=True)
-    image = models.ImageField(default="nophoto.png")
+    image = models.ImageField(default="nophoto.png", blank=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, blank=True)
     quantity = models.IntegerField(default=0, blank=True)
     vendorCode = models.CharField(default=0, max_length=50, blank=True)
@@ -457,3 +457,6 @@ class ShopConstant(models.Model):
 
     def getMinOrderSum():
         return Decimal(ShopConstant.getField('minordersum'))
+
+    def getOrderInfoMail():
+        return ShopConstant.getField('orderinfomail')
