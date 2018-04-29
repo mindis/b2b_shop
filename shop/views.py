@@ -441,7 +441,8 @@ def endOfOrder(request):
         msg.attach_alternative(html_message, "text/html")
         msg.attach('invoice.pdf', pdf, 'application/pdf')
         msg.send()
-
+    else:
+        return HttpResponse('ERROR')
     # send_mail(
     #     subject, 
     #     message, 
