@@ -20,16 +20,17 @@ import xlrd
 
 # methods returning JSON or string/int/decimal
 
+
 def getItems(request):
     if request.method == 'POST':
         res = {}
         for item in ProductVariant.objects.all():
             obj = {}
-            obj['name'] = item.name;
-            obj['slug'] = item.slug;
-            obj['measure'] = item.product.measure;
-            obj['quantity'] = item.quantity;
-            res[item.slug] = obj;
+            obj['name'] = item.name
+            obj['slug'] = item.slug
+            obj['measure'] = item.product.measure
+            obj['quantity'] = item.quantity
+            res[item.slug] = obj
         return HttpResponse(json.dumps(res))
     return HttpResponse('error')
 
@@ -71,9 +72,9 @@ def getCart(request):
             return HttpResponse(json.dumps(res))
 
         cart = Order.objects.get_or_create(
-                user=request.user,
-                status=OrderStatus.objects.get(pk=1)
-                )[0]
+            user=request.user,
+            status=OrderStatus.objects.get(pk=1)
+        )[0]
 
         cart.delZeroes()
 
@@ -86,15 +87,21 @@ def getCart(request):
 
 def addToCart(request):
     if request.method == 'POST':
-        if 'item' in request.POST and 'quantity' in request.POST and request.POST['quantity'].isdigit():
+        if 'item' in request.POST \
+                and 'quantity' in request.POST \
+                and request.POST['quantity'].isdigit():
             pItem = request.POST['item']
             pQuantity = int(request.POST['quantity'])
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+                cart = Order.objects.filter(
+                    user=request.user, status=OrderStatus.objects.get(pk=1))
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
+                    cart = Order.objects.create(
+                        user=request.user,
+                        status=OrderStatus.objects.get(pk=1)
+                    )
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
@@ -111,15 +118,21 @@ def addToCart(request):
 
 def setInCart(request):
     if request.method == 'POST':
-        if 'item' in request.POST and 'quantity' in request.POST and request.POST['quantity'].isdigit():
+        if 'item' in request.POST \
+                and 'quantity' in request.POST \
+                and request.POST['quantity'].isdigit():
             pItem = request.POST['item']
             pQuantity = int(request.POST['quantity'])
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+                cart = Order.objects.filter(
+                    user=request.user, status=OrderStatus.objects.get(pk=1))
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
+                    cart = Order.objects.create(
+                        user=request.user,
+                        status=OrderStatus.objects.get(pk=1)
+                    )
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
@@ -137,7 +150,8 @@ def setInCart(request):
 def getCartSum(request):
     if not request.user.is_authenticated:
         return HttpResponse(0)
-    cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+    cart = Order.objects.filter(
+        user=request.user, status=OrderStatus.objects.get(pk=1))
     if len(cart) == 0:
         return HttpResponse(0)
     cart = cart[0]
@@ -151,7 +165,7 @@ def getDelivery(request):
     cart = Order.objects.get_or_create(
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
-        )[0]
+    )[0]
     cart.delZeroes()
     return HttpResponse(cart.getDelivery())
 
@@ -162,7 +176,7 @@ def getTotal(request):
     cart = Order.objects.get_or_create(
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
-        )[0]
+    )[0]
     cart.delZeroes()
     return HttpResponse(cart.getDelivery() + cart.getTotalSum())
 
@@ -178,14 +192,20 @@ def getItemQuantityInCart(request):
             if not request.user.is_authenticated:
                 return HttpResponse('not authenticated')
             else:
-                cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+                cart = Order.objects.filter(
+                    user=request.user,
+                    status=OrderStatus.objects.get(pk=1)
+                )
                 if len(cart) == 0:
-                    cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
+                    cart = Order.objects.create(
+                        user=request.user,
+                        status=OrderStatus.objects.get(pk=1)
+                    )
                 else:
                     cart = cart[0]
                 cart.delZeroes()
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
-                return HttpResponse( cart.getQuantity(item))
+                return HttpResponse(cart.getQuantity(item))
         else:
             return HttpResponse('error')
     else:
@@ -195,26 +215,32 @@ def getItemQuantityInCart(request):
 def getMinOrderSum(request):
     return HttpResponse(ShopConstant.getMinOrderSum())
 
-#------------ Views (HTML/PDF)
+# ----------- Views (HTML/PDF)
+
 
 def orderList(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
-    invoices = Invoice.objects.filter(order__user=request.user).order_by('-date')
-    return render(request, 'shop/orderlist.html', { 'invoices' : invoices })
+    invoices = Invoice.objects.filter(
+        order__user=request.user).order_by('-date')
+    return render(request, 'shop/orderlist.html', {'invoices': invoices})
 
 
 def getInvoicePdf(request):
     invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
     if request.user.is_superuser or request.user == invoice.order.user:
         invoice_html = get_template('shop/invoice.html').render(
-                {
-                    'invoice' : invoice,
-                    'sumInWords': num2words(invoice.toPay(),
-                        lang='ru', to='currency', currency='RUB',
-                        seperator=' ', cents=False).capitalize()
-                })
-        pdf = pdfkit.from_string(invoice_html, False, options = {'quiet': ''})
+            {
+                'invoice': invoice,
+                'sumInWords': num2words(invoice.toPay(),
+                                        lang='ru',
+                                        to='currency',
+                                        currency='RUB',
+                                        seperator=' ',
+                                        cents=False
+                                        ).capitalize()
+            })
+        pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
 
         return HttpResponse(pdf, content_type='application/pdf')
     return HttpResponse('You have not access to this invoice')
@@ -224,40 +250,59 @@ def getInvoice(request):
     invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
     if request.user.is_superuser or request.user == invoice.order.user:
         return render(request, 'shop/invoice.html',
-            {
-            'invoice' : invoice,
-            'sumInWords': num2words(invoice.toPay(),
-                lang='ru', to='currency', currency='RUB',
-                seperator=' ', cents=False).capitalize()
-            })
+                      {
+                          'invoice': invoice,
+                          'sumInWords': num2words(invoice.toPay(),
+                                                  lang='ru',
+                                                  to='currency',
+                                                  currency='RUB',
+                                                  seperator=' ',
+                                                  cents=False
+                                                  ).capitalize()
+                      })
     return HttpResponse('You have not access to this invoice')
 
 
 def cart(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
-    cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+    cart = Order.objects.filter(
+        user=request.user, status=OrderStatus.objects.get(pk=1))
     if len(cart) == 0:
-        cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
+        cart = Order.objects.create(
+            user=request.user, status=OrderStatus.objects.get(pk=1))
     else:
         cart = cart[0]
     cart.delZeroes()
-    return render(request, 'shop/cart.html', {'cart' : cart, 'Delivery' : Delivery.objects.all()})
+    return render(request, 'shop/cart.html',
+                  {
+                      'cart': cart,
+                      'Delivery': Delivery.objects.all()
+                  }
+                  )
 
 
 def makeOrder(request):
     if not request.user.is_authenticated:
         return redirect('/itemlist')
     if request.method == 'GET':
-        cart = Order.objects.filter(user=request.user, status=OrderStatus.objects.get(pk=1))
+        cart = Order.objects.filter(
+            user=request.user, status=OrderStatus.objects.get(pk=1))
         if len(cart) == 0:
-            cart = Order.objects.create(user=request.user, status=OrderStatus.objects.get(pk=1))
+            cart = Order.objects.create(
+                user=request.user, status=OrderStatus.objects.get(pk=1))
         else:
             cart = cart[0]
         cart.delZeroes()
         if not cart.checkOrder():
             return HttpResponse('total sum is too low')
-        return render(request, 'shop/customerinfo.html', {'cart': cart, 'DADATA_API_KEY': settings.DADATA_API_KEY, 'total' : (cart.getDelivery() + cart.getTotalSum())})
+        return render(request, 'shop/customerinfo.html',
+                      {
+                          'cart': cart,
+                          'DADATA_API_KEY': settings.DADATA_API_KEY,
+                          'total': (cart.getDelivery() + cart.getTotalSum())
+                      }
+                      )
 
     inn = ''
     kpp = ''
@@ -278,19 +323,25 @@ def makeOrder(request):
         cart = Order.objects.get_or_create(
             user=request.user,
             status=OrderStatus.objects.get(pk=1)
-            )[0]
-        return render(request, 'shop/customerinfo.html', {'cart':cart, 'errors' : 'Ошибка', 'DADATA_API_KEY': settings.DADATA_API_KEY})
+        )[0]
+        return render(request, 'shop/customerinfo.html',
+                      {
+                          'cart': cart,
+                          'errors': 'Ошибка',
+                          'DADATA_API_KEY': settings.DADATA_API_KEY
+                      }
+                      )
 
     org = Organisation.objects.get_or_create(
         inn=inn,
         kpp=kpp,
         address=address,
         name=name
-        )[0]
+    )[0]
     cart = Order.objects.get_or_create(
         user=request.user,
         status=OrderStatus.objects.get(pk=1)
-        )[0]
+    )[0]
     cart.delZeroes()
 
     if not cart.checkOrder():
@@ -303,11 +354,11 @@ def makeOrder(request):
         date=timezone.now(),
         seller=SellerOrganisation.objects.get(pk=1),
         customer=org,
-        #order=cart,
+        # order=cart,
         personInCharge=face,
         comment=comment,
         shipAddress=shipAddress
-        )
+    )
     cart.invoice = invoice
 
     for item in cart.items.all():
@@ -322,10 +373,10 @@ def makeOrder(request):
 def itemList(request):
     productClasses = ProductClass.objects.all()
     return render(request, 'shop/itemList.html',
-        {
-        'productClasses' : productClasses,
-        'cls' : 'all'
-        })
+                  {
+                      'productClasses': productClasses,
+                      'cls': 'all'
+                  })
 
 
 def itemListSelection(request, cls):
@@ -334,10 +385,10 @@ def itemListSelection(request, cls):
     if len(productClasses.filter(slug=cls)) == 0:
         raise Http404('there are no such tag: ' + cls)
     return render(request, 'shop/itemList.html',
-        {
-        'productClasses' : productClasses,
-        'cls' : cls
-        })
+                  {
+                      'productClasses': productClasses,
+                      'cls': cls
+                  })
 
 
 def endOfOrder(request):
@@ -346,14 +397,14 @@ def endOfOrder(request):
     if 'pk' not in request.GET:
         return HttpResponse('error')
     pk = request.GET['pk']
-    return render(request, 'shop/endoforder.html', {'pk' : pk})
+    return render(request, 'shop/endoforder.html', {'pk': pk})
 
 
 def itemPage(request, itemSlug):
     item = get_object_or_404(Product.objects, slug=itemSlug)
     if not item.available:
         return HttpResponse('Product ' + item.slug + ' is not available now.')
-    return render(request, 'shop/itemPage.html', {'item' : item})
+    return render(request, 'shop/itemPage.html', {'item': item})
 
 
 def about(request):
@@ -361,12 +412,13 @@ def about(request):
 
 # auth
 
+
 class LoginView(account.views.LoginView):
     form_class = account.forms.LoginEmailForm
 
 
 class SignupView(account.views.SignupView):
-    form_class =  shop.forms.SignupForm
+    form_class = shop.forms.SignupForm
 
     def generate_username(self, form):
         username = form.cleaned_data["email"]
@@ -377,6 +429,7 @@ class SignupView(account.views.SignupView):
 
 # admin
 
+
 def adminUploadQuantities(request):
     if not request.user.is_superuser:
         return HttpResponse('###')
@@ -385,13 +438,22 @@ def adminUploadQuantities(request):
         form = shop.forms.UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
-            updated, errors = ProductVariant.updateQuantitiesXls('files/quantity/' + request.FILES['file'].name)
+            updated, errors = ProductVariant.updateQuantitiesXls(
+                'files/quantity/' + request.FILES['file'].name)
 
-
-            return render(request, 'admin/admin-update-quantities.html', {'updated': updated, 'errors' : errors})
+            return render(request, 'admin/admin-update-quantities.html',
+                          {
+                              'updated': updated,
+                              'errors': errors
+                          }
+                          )
     else:
         form = shop.forms.UploadFileForm()
-    return render(request, 'admin/admin-update-quantities.html', {'form': form})
+    return render(request, 'admin/admin-update-quantities.html',
+                  {
+                      'form': form
+                  }
+                  )
 
 
 def handle_uploaded_file(f):
