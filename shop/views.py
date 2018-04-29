@@ -9,7 +9,11 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from django.template.loader import get_template
 from django.utils import timezone
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.sites.shortcuts import get_current_site
 from io import BytesIO, StringIO
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from num2words import num2words
 import json
 import pdfkit
@@ -397,6 +401,55 @@ def endOfOrder(request):
     if 'pk' not in request.GET:
         return HttpResponse('error')
     pk = request.GET['pk']
+
+    invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
+    if request.user.is_superuser or request.user == invoice.order.user:
+        invoice_html = get_template('shop/invoice.html').render(
+            {
+                'invoice': invoice,
+                'sumInWords': num2words(invoice.toPay(),
+                                        lang='ru',
+                                        to='currency',
+                                        currency='RUB',
+                                        seperator=' ',
+                                        cents=False
+                                        ).capitalize()
+            })
+        pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
+
+        subject = render_to_string(
+            "shop/email/order_subject.txt", 
+            { 'current_site' : get_current_site(request) }
+            )
+        subject = "".join(subject.splitlines())
+        message = render_to_string(
+            "shop/email/order.txt", 
+            { 'current_site' : get_current_site(request) }
+            )
+        html_message = render_to_string(
+            "shop/email/order.html", 
+            { 'current_site' : get_current_site(request) }
+            )
+
+        msg = EmailMultiAlternatives(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [ request.user.email ],
+            [ settings.EMAIL_FOR_COPY ],
+        )
+        msg.attach_alternative(html_message, "text/html")
+        msg.attach('invoice.pdf', pdf, 'application/pdf')
+        msg.send()
+
+    # send_mail(
+    #     subject, 
+    #     message, 
+    #     settings.DEFAULT_FROM_EMAIL,
+    #     ( request.user.email ), 
+    #     html_message=html_message
+    # )
+
     return render(request, 'shop/endoforder.html', {'pk': pk})
 
 
