@@ -9,7 +9,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from django.template.loader import get_template
 from django.utils import timezone
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from io import BytesIO, StringIO
 from django.core.mail import send_mail
@@ -418,14 +418,14 @@ def endOfOrder(request):
             { 'current_site' : get_current_site(request) }
             )
 
-        msg = EmailMultiAlternatives(
+        msg = EmailMessage(
             subject,
-            message,
+            html_message,
             settings.DEFAULT_FROM_EMAIL,
             [ request.user.email ]
         )
-        msg.attach_alternative(html_message, "text/html")
-        #msg.content_subtype = "html"
+        #msg.attach_alternative(html_message, "text/html")
+        msg.content_subtype = "html"
         
         _invoice_html = get_template('shop/invoice.html').render(
             {
