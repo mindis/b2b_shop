@@ -375,7 +375,7 @@ def itemList(request):
     return render(request, 'shop/itemList.html',
                   {
                       'productClasses': productClasses,
-                      'cls': 'all'
+                      'cls': 'all',
                   })
 
 

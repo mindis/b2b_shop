@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% load staticfiles %} {% load l10n %} {% block head %}
+{% extends 'base.html' %} 
+{% load staticfiles %} 
+{% load l10n %} 
+
+{% block head %}
 <script type="text/javascript" src="{% static 'js/itemList.js' %}"></script>
 <script>
     $(document).ready(function () {
@@ -16,23 +20,27 @@
         {% endif %}
         {% endfor %}
     });
-</script> {% endblock %} {% block content %}
+</script> 
+{% endblock %} 
+{% block content %}
 <div class="row">
 
     <ul class="nav nav-tabs">
-        {% for tag in productClasses %} {% if tag.available %}
-        <li {% if tag.slug==cls %}class="active" {% endif %}>
+        {% for tag in productClasses %} 
+        {% if tag.available %}
+        <li {% if tag.slug == cls %}class="active" {% endif %}>
             <a data-toggle="tab" href="#{{tag.slug}}">
                 {{ tag.name }}
                 <!--<span class="badge">{{ tag.product_set.all|length }}</span>-->
             </a>
         </li>
-        {% endif %} {% endfor %}
+        {% endif %}
+        {% endfor %}
     </ul>
     <div class="tab-content">
-        {% for tag in productClasses %} {% if tag.available %}
-        <div id="{{ tag.slug }}" {% if tag.slug==c ls %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif
-            %}>
+        {% for tag in productClasses %} 
+        {% if tag.available %}
+        <div id="{{ tag.slug }}" {% if tag.slug == cls %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
             <p>
                 <input style="margin-top:10px;" class="form-control" id="search_{{tag.slug}}" type="text" placeholder="Поиск..">
             </p>
@@ -52,7 +60,8 @@
                         </tr>
                     </thead>
                     <tbody id="tbody_{{tag.slug}}">
-                        {% for product in tag.product_set.all %} {% if product.available %}
+                        {% for product in tag.product_set.all %}
+                        {% if product.available %}
                         <tr data-search-keywords="{{product.name}}:{{product.slug}}:{% for item in product.productvariant_set.all %}{{item.addition}}:{% endfor %}">
                             <th>
                                 <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
@@ -91,9 +100,11 @@
                             </th>
                             <th>
                                 <select class="form-control variant-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="selection_{{ product.slug }}_{{tag.slug}}">
-                                    {% for item in product.productvariant_set.all %} {% if item.available %}
+                                    {% for item in product.productvariant_set.all %} 
+                                    {% if item.available %}
                                     <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
-                                    {% endif %} {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
                                 </select>
                             </th>
                             <th>
@@ -123,12 +134,14 @@
                                 </button>
                             </th>
                         </tr>
-                        {% endif %} {% endfor %}
+                        {% endif %} 
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        {% endif %} {% endfor %}
+        {% endif %} 
+        {% endfor %}
 
     </div>
 </div>
