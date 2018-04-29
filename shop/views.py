@@ -447,7 +447,7 @@ def endOfOrder(request):
          subject, 
          message, 
          settings.DEFAULT_FROM_EMAIL,
-         ( request.user.email ), 
+         [ request.user.email ], 
          html_message=html_message
      )
 
