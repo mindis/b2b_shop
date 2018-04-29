@@ -402,8 +402,8 @@ def endOfOrder(request):
         return HttpResponse('error')
     pk = request.GET['pk']
 
-    #_invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
-    #if request.user.is_superuser or request.user == _invoice.order.user:
+    _invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
+    if request.user.is_superuser or request.user == _invoice.order.user:
         #invoice_html = get_template('shop/invoice.html').render(
         #    {
         #        'invoice': _invoice,
@@ -417,39 +417,38 @@ def endOfOrder(request):
         #    })
         #pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
 
-    subject = render_to_string(
-        "shop/email/order_subject.txt", 
-        { 'current_site' : get_current_site(request) }
-        )
-    subject = "".join(subject.splitlines())
-    message = render_to_string(
-        "shop/email/order.txt", 
-        { 'current_site' : get_current_site(request) }
-        )
-    html_message = render_to_string(
-        "shop/email/order.html", 
-        { 'current_site' : get_current_site(request) }
-        )
+        subject = render_to_string(
+            "shop/email/order_subject.txt", 
+            { 'current_site' : get_current_site(request) }
+            )
+        subject = "".join(subject.splitlines())
+        message = render_to_string(
+            "shop/email/order.txt", 
+            { 'current_site' : get_current_site(request) }
+            )
+        html_message = render_to_string(
+            "shop/email/order.html", 
+            { 'current_site' : get_current_site(request) }
+            )
 
-    #    msg = EmailMultiAlternatives(
-    #        subject,
-    #        message,
-    #        settings.DEFAULT_FROM_EMAIL,
-    #        [ request.user.email ],
-    #        [ settings.EMAIL_FOR_COPY ],
-    #    )
-    #    msg.attach_alternative(html_message, "text/html")
-    #    #msg.attach('invoice1.pdf', pdf, 'application/pdf')
-    #    msg.send()
-    #else:
-    #    return HttpResponse('ERROR')
-    send_mail(
-         subject, 
-         message, 
-         settings.DEFAULT_FROM_EMAIL,
-         [ request.user.email ], 
-         html_message=html_message
-     )
+        msg = EmailMultiAlternatives(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [ request.user.email ],
+        )
+        msg.attach_alternative(html_message, "text/html")
+        #msg.attach('invoice1.pdf', pdf, 'application/pdf')
+        msg.send()
+    else:
+        return HttpResponse('ERROR')
+    #send_mail(
+    #     subject, 
+    #     message, 
+    #     settings.DEFAULT_FROM_EMAIL,
+    #     [ request.user.email ], 
+    #     html_message=html_message
+    #)
 
     return render(request, 'shop/endoforder.html', {'pk': pk})
 
