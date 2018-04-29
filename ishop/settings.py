@@ -149,6 +149,8 @@ MEDIA_URL = '/media/'
 
 USE_THOUSAND_SEPARATOR = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 def ACCOUNT_USER_DISPLAY(user): return user.email
 
