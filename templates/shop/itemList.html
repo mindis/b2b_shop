@@ -21,7 +21,7 @@
 
     <ul class="nav nav-tabs">
         {% for tag in productClasses %} {% if tag.available %}
-        <li {% if tag.slug==c ls %}class="active" {% endif %}>
+        <li {% if tag.slug==cls %}class="active" {% endif %}>
             <a data-toggle="tab" href="#{{tag.slug}}">
                 {{ tag.name }}
                 <!--<span class="badge">{{ tag.product_set.all|length }}</span>-->
