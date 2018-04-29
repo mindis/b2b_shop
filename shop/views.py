@@ -435,10 +435,11 @@ def endOfOrder(request):
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [ request.user.email ],
+            [ request.user.email ]
         )
-        msg.attach_alternative(html_message, "text/html")
         msg.attach('invoice.pdf', _pdf, 'application/pdf')
+        msg.attach_alternative(html_message, "text/html")
+        msg.content_subtype = "html"
         msg.send()
     else:
         return HttpResponse('ERROR')
