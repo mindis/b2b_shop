@@ -402,12 +402,12 @@ def endOfOrder(request):
         return HttpResponse('error')
     pk = request.GET['pk']
 
-    invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
-    if request.user.is_superuser or request.user == invoice.order.user:
+    _invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
+    if request.user.is_superuser or request.user == _invoice.order.user:
         invoice_html = get_template('shop/invoice.html').render(
             {
-                'invoice': invoice,
-                'sumInWords': num2words(invoice.toPay(),
+                'invoice': _invoice,
+                'sumInWords': num2words(_invoice.toPay(),
                                         lang='ru',
                                         to='currency',
                                         currency='RUB',
