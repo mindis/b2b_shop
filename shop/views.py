@@ -417,19 +417,19 @@ def endOfOrder(request):
         #    })
         #pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
 
-        subject = render_to_string(
-            "shop/email/order_subject.txt", 
-            { 'current_site' : get_current_site(request) }
-            )
-        subject = "".join(subject.splitlines())
-        message = render_to_string(
-            "shop/email/order.txt", 
-            { 'current_site' : get_current_site(request) }
-            )
-        html_message = render_to_string(
-            "shop/email/order.html", 
-            { 'current_site' : get_current_site(request) }
-            )
+    subject = render_to_string(
+        "shop/email/order_subject.txt", 
+        { 'current_site' : get_current_site(request) }
+        )
+    subject = "".join(subject.splitlines())
+    message = render_to_string(
+        "shop/email/order.txt", 
+        { 'current_site' : get_current_site(request) }
+        )
+    html_message = render_to_string(
+        "shop/email/order.html", 
+        { 'current_site' : get_current_site(request) }
+        )
 
     #    msg = EmailMultiAlternatives(
     #        subject,
