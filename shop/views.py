@@ -422,7 +422,7 @@ def endOfOrder(request):
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [ request.user.email ]
+            [ request.user.email, ]
         )
         msg.attach_alternative(html_message, "text/html")
         msg.content_subtype = "html"
@@ -443,13 +443,6 @@ def endOfOrder(request):
         msg.send()
     else:
         return HttpResponse('ERROR')
-    #send_mail(
-    #     subject, 
-    #     message, 
-    #     settings.DEFAULT_FROM_EMAIL,
-    #     [ request.user.email ], 
-    #     html_message=html_message
-    #)
 
     return render(request, 'shop/endoforder.html', {'pk': pk})
 
