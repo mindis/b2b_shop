@@ -1,55 +1,45 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load l10n %}
-
-{% block head %}
+{% extends 'base.html' %} {% load staticfiles %} {% load l10n %} {% block head %}
 <script type="text/javascript" src="{% static 'js/itemList.js' %}"></script>
 <script>
-$(document).ready(function() {
-    $("#nav_homepage").attr("class", "active");
-    {% for tag in productClasses %}
+    $(document).ready(function () {
+        $("#nav_homepage").attr("class", "active");
+        {% for tag in productClasses %}
         {% if tag.available %}
-            $("#search_{{tag.slug}}").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#tbody_{{tag.slug}} tr").filter(function() {
-                  $(this).toggle(
-                      $(this).attr("data-search-keywords").toLowerCase().indexOf(value) > - 1
-                  );
-                });
+        $("#search_{{tag.slug}}").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tbody_{{tag.slug}} tr").filter(function () {
+                $(this).toggle(
+                    $(this).attr("data-search-keywords").toLowerCase().indexOf(value) > - 1
+                );
             });
+        });
         {% endif %}
-    {% endfor %}
-});
-</script>
-{% endblock %}
-
-{% block content %}
+        {% endfor %}
+    });
+</script> {% endblock %} {% block content %}
 <div class="row">
 
     <ul class="nav nav-tabs">
-        {% for tag in productClasses %}
-            {% if tag.available %}
-            <li {% if tag.slug == cls %}class="active"{% endif %}>
-                <a data-toggle="tab" href="#{{tag.slug}}">
-                    {{ tag.name }}
-                    <!--<span class="badge">{{ tag.product_set.all|length }}</span>-->
-                </a>
-            </li>
-            {% endif %}
-        {% endfor %}
+        {% for tag in productClasses %} {% if tag.available %}
+        <li {% if tag.slug==c ls %}class="active" {% endif %}>
+            <a data-toggle="tab" href="#{{tag.slug}}">
+                {{ tag.name }}
+                <!--<span class="badge">{{ tag.product_set.all|length }}</span>-->
+            </a>
+        </li>
+        {% endif %} {% endfor %}
     </ul>
     <div class="tab-content">
-        {% for tag in productClasses %}
-            {% if tag.available %}
-            <div id="{{ tag.slug }}" {% if tag.slug == cls %}
-            class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
-                <p>
-                    <input style="margin-top:10px;" class="form-control" id="search_{{tag.slug}}" type="text" placeholder="Поиск..">
-                </p>
-                <div class="table-responsive">
-                     <table class="table table-striped">
-                        <thead>
-                          <tr>
+        {% for tag in productClasses %} {% if tag.available %}
+        <div id="{{ tag.slug }}" {% if tag.slug==c ls %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif
+            %}>
+            <p>
+                <input style="margin-top:10px;" class="form-control" id="search_{{tag.slug}}" type="text" placeholder="Поиск..">
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
                             <th>Изображение</th>
                             <th>Наименование</th>
                             <th>Вариант</th>
@@ -59,18 +49,18 @@ $(document).ready(function() {
                             <th>ед.&nbsp;измерения</th>
                             <th>сумма</th>
                             <th></th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody_{{tag.slug}}">
-                            {% for product in tag.product_set.all %}
-                                {% if product.available %}
-                                <tr data-search-keywords="{{product.name}}:{{product.slug}}:{% for item in product.productvariant_set.all %}{{item.addition}}:{% endfor %}">
-                                    <th>
-                                        <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
-                                    </th>
-                                    <th>
-                                        <h5>
-                                            <span id="popover_{{product.slug}}" style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{product.name}}</h4>' data-html="true" data-content='<div>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_{{tag.slug}}">
+                        {% for product in tag.product_set.all %} {% if product.available %}
+                        <tr data-search-keywords="{{product.name}}:{{product.slug}}:{% for item in product.productvariant_set.all %}{{item.addition}}:{% endfor %}">
+                            <th>
+                                <img class="img-circle" src="/media/{{ product.image }}" alt="{{product.slug}}" height="50px" width="50px" />
+                            </th>
+                            <th>
+                                <h5>
+                                    <span id="popover_{{product.slug}}" style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{product.name}}</h4>'
+                                        data-html="true" data-content='<div>
                                                     <img class="img-circle" src="/media/{{ product.image }}" height="150px" width="150px"/>
                                                 </div>
                                                 <div>
@@ -91,55 +81,54 @@ $(document).ready(function() {
                                                 <div>
                                                     {% for pclass in product.productClass.all %}
                                                         {% if pclass.available %}
-                                                        <a href="itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
+                                                        <a href="/itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
                                                         {% endif %}
                                                     {% endfor%}
                                                 </div>'>
-                                                {{ product.name }}
-                                            </span>
-                                        </h5>
-                                    </th>
-                                    <th>
-                                        <select class="form-control variant-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="selection_{{ product.slug }}_{{tag.slug}}">
-                                            {% for item in product.productvariant_set.all %}
-                                                {% if item.available %}
-                                                    <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </th>
-                                    <th>
-                                        <span data-tag="{{tag.slug}}" data-product="{{product.slug}}" data-toggle="popover" title='<h4>Цены</h4>' style="white-space: nowrap; border-bottom: 1px dashed blue;" data-html="true" class="item-price">
-                                            ?
-                                        </span>
-                                    </th>
-                                    <th>
-                                        <span style="white-space: nowrap;" data-tag="{{tag.slug}}" data-product="{{product.slug}}" class="item-count">
-                                            ?
-                                        </span>
-                                    </th>
-                                    <th>
-                                        <input type="number" class="form-control quantity-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="quantity_{{product.slug}}_{{tag.slug}}" value="0" min="0"/>
-                                    </th>
-                                    <th style="white-space: nowrap;">
-                                        {{product.measure}}
-                                    </th>
-                                    <th>
-                                        <span data-tag="{{tag.slug}}" style="white-space: nowrap;" data-product="{{product.slug}}" class="product-sum" id="sm_{{ product.slug }}_{{tag.slug}}">0&nbsp;р</span>
-                                    </th>
-                                    <th>
-                                        <button data-tag="{{tag.slug}}" data-content="" data-placement="top" data-product="{{product.slug}}" id="btn_{{ product.slug }}_{{tag.slug}}" type="button" class="btn btn-success btn-add-cart">Добавить в корзину
-                                        </button>
-                                    </th>
-                                </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                                        {{ product.name }}
+                                    </span>
+                                </h5>
+                            </th>
+                            <th>
+                                <select class="form-control variant-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="selection_{{ product.slug }}_{{tag.slug}}">
+                                    {% for item in product.productvariant_set.all %} {% if item.available %}
+                                    <option value="{{item.slug}}" id="option_{{item.slug}}_{{tag.slug}}">{{item.addition}}</option>
+                                    {% endif %} {% endfor %}
+                                </select>
+                            </th>
+                            <th>
+                                <span data-tag="{{tag.slug}}" data-product="{{product.slug}}" data-toggle="popover" title='<h4>Цены</h4>' style="white-space: nowrap; border-bottom: 1px dashed blue;"
+                                    data-html="true" class="item-price">
+                                    ?
+                                </span>
+                            </th>
+                            <th>
+                                <span style="white-space: nowrap;" data-tag="{{tag.slug}}" data-product="{{product.slug}}" class="item-count">
+                                    ?
+                                </span>
+                            </th>
+                            <th>
+                                <input type="number" class="form-control quantity-selector" data-tag="{{tag.slug}}" data-product="{{product.slug}}" id="quantity_{{product.slug}}_{{tag.slug}}"
+                                    value="0" min="0" />
+                            </th>
+                            <th style="white-space: nowrap;">
+                                {{product.measure}}
+                            </th>
+                            <th>
+                                <span data-tag="{{tag.slug}}" style="white-space: nowrap;" data-product="{{product.slug}}" class="product-sum" id="sm_{{ product.slug }}_{{tag.slug}}">0&nbsp;р</span>
+                            </th>
+                            <th>
+                                <button data-tag="{{tag.slug}}" data-content="" data-placement="top" data-product="{{product.slug}}" id="btn_{{ product.slug }}_{{tag.slug}}"
+                                    type="button" class="btn btn-success btn-add-cart">Добавить в корзину
+                                </button>
+                            </th>
+                        </tr>
+                        {% endif %} {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            {% endif %}
-        {% endfor %}
+        </div>
+        {% endif %} {% endfor %}
 
     </div>
 </div>

@@ -1,42 +1,34 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load l10n %}
-
-{% block head %}
-<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
-
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load staticfiles %} {% load l10n %} {% block head %}
+<script type="text/javascript" src="{% static 'js/cart.js' %}"></script> {% endblock %} {% block content %}
 
 <div class="content">
     <div class="row">
         <h1>Корзина</h1>
     </div>
     <div id="table" class="row">
-         <table class="table table-striped">
+        <table class="table table-striped">
             <thead>
-              <tr>
-                <th>Изображение</th>
-                <th>Наименование</th>
-                <th>цена</th>
-                <th>на складе</th>
-                <th>количество</th>
-                <th>ед измерения</th>
-                <th>сумма</th>
-                <th></th>
-              </tr>
+                <tr>
+                    <th>Изображение</th>
+                    <th>Наименование</th>
+                    <th>цена</th>
+                    <th>на складе</th>
+                    <th>количество</th>
+                    <th>ед измерения</th>
+                    <th>сумма</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
                 {% for orderItem in cart.items.all %}
-                    <tr id="tr_{{orderItem.product.slug}}">
-                        <th>
-                            <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
-                        </th>
-                        <th>
-                            <h5>
-                        <span style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{ orderItem.product.name }}</h4>' data-html="true"
-                            data-content='
+                <tr id="tr_{{orderItem.product.slug}}">
+                    <th>
+                        <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
+                    </th>
+                    <th>
+                        <h5>
+                            <span style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{ orderItem.product.name }}</h4>' data-html="true"
+                                data-content='
                         <div>
                             <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="100px" width="100px" />
                         </div>
@@ -45,14 +37,14 @@
                         </div>
                         <div>
                             {% for pclass in orderItem.product.product.productClass.all %}
-                                <a href="itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
+                                <a href="/itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
                             {% endfor%}
                         </div>'>{{ orderItem.product.name }} </span>
                         </h5>
-                        </th>
-                        <th>
-                            <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены</h4>' data-html="true"
-                                data-content='
+                    </th>
+                    <th>
+                        <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены</h4>' data-html="true"
+                            data-content='
                             <div>
                                 <table class="table table-striped">
                                     <thead>
@@ -72,29 +64,33 @@
                                 </table>
                             </div>' class="item-price" data-product="{{orderItem.product.slug}}">
                             {{orderItem.price}}&nbsp;p
-                            </span>
-                        </th>
-                        <th>
-                            <span style="white-space: nowrap;" class="item-stored" data-product="{{orderItem.product.slug}}"> {{orderItem.product.quantity}}</span> {{orderItem.product.product.measure}}
-                        </th>
-                        <th>
-                            <input type="number" class="form-control item-quantity" id="quantity_{{orderItem.pk}}" value="{{orderItem.quantity}}" min="0" data-toggle="tooltip" data-placement="top" data-product="{{orderItem.product.slug}}" title='Введите новое количество товара'/>
-                        </th>
-                        <th style="white-space: nowrap;">
-                            {{orderItem.product.product.measure}}
-                        </th>
-                        <th>
-                            <span style="white-space: nowrap;" class="item-sum" data-product="{{orderItem.product.slug}}" id="sm_{{orderItem.pk}}">0&nbsp;р</span>
-                        </th>
-                        <!--<th>
+                        </span>
+                    </th>
+                    <th>
+                        <span style="white-space: nowrap;" class="item-stored" data-product="{{orderItem.product.slug}}"> {{orderItem.product.quantity}}</span> {{orderItem.product.product.measure}}
+                    </th>
+                    <th>
+                        <input type="number" class="form-control item-quantity" id="quantity_{{orderItem.pk}}" value="{{orderItem.quantity}}" min="0"
+                            data-toggle="tooltip" data-placement="top" data-product="{{orderItem.product.slug}}" title='Введите новое количество товара'
+                        />
+                    </th>
+                    <th style="white-space: nowrap;">
+                        {{orderItem.product.product.measure}}
+                    </th>
+                    <th>
+                        <span style="white-space: nowrap;" class="item-sum" data-product="{{orderItem.product.slug}}" id="sm_{{orderItem.pk}}">0&nbsp;р</span>
+                    </th>
+                    <!--<th>
                             <button id="btn_upd_{{orderItem.pk}}" type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Нажмите кнопку, чтобы изменить количество товаров.">обновить количество
                             </button>
                         </th>-->
-                        <th>
-                            <button id="btn_rm_{{orderItem.product.slug}}" data-placement="top" data-product="{{orderItem.product.slug}}" data-type="button" class="item-del btn btn-danger"><span class="glyphicon glyphicon-trash"></span>
-                            </button>
-                        </th>
-                    </tr>
+                    <th>
+                        <button id="btn_rm_{{orderItem.product.slug}}" data-placement="top" data-product="{{orderItem.product.slug}}" data-type="button"
+                            class="item-del btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </th>
+                </tr>
                 {% endfor %}
                 <tr>
                     <th></th>
@@ -103,15 +99,16 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span style="white-space: nowrap;" id="cart-total">0</span>&nbsp;р</th>
+                    <th>
+                        <span style="white-space: nowrap;" id="cart-total">0</span>&nbsp;р</th>
                     <th></th>
                     <th></th>
                 </tr>
-                 <tr>
+                <tr>
                     <th></th>
                     <th>
-                        <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены на доставку</h4>' data-html="true"
-                        data-content='
+                        <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены на доставку</h4>'
+                            data-html="true" data-content='
                         <div>
                             <table class="table table-striped">
                                 <thead>
@@ -137,7 +134,9 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span id="delivery-sum">0&nbsp;р</span></th>
+                    <th>
+                        <span id="delivery-sum">0&nbsp;р</span>
+                    </th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -148,11 +147,12 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><span style="white-space: nowrap;" id="total">0</span>&nbsp;р</th>
+                    <th>
+                        <span style="white-space: nowrap;" id="total">0</span>&nbsp;р</th>
                     <th></th>
                     <th></th>
                 </tr>
-            <tbody/>
+                <tbody/>
         </table>
     </div>
     <div class="row">
@@ -164,9 +164,9 @@
                 <a id="ok" class="btn btn-success" href="/order" data-placement="left" style="width:100%;">
                     оформить заказ
                 </a>
-                </span>
+            </span>
         </div>
-    <div>
-</div>
+        <div>
+        </div>
 
-{% endblock %}
+        {% endblock %}
