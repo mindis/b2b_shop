@@ -404,18 +404,18 @@ def endOfOrder(request):
 
     _invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
     if request.user.is_superuser or request.user == _invoice.order.user:
-        #invoice_html = get_template('shop/invoice.html').render(
-        #    {
-        #        'invoice': _invoice,
-        #        'sumInWords': num2words(_invoice.toPay(),
-        #                                lang='ru',
-        #                                to='currency',
-        #                                currency='RUB',
-        #                                seperator=' ',
-        #                                cents=False
-        #                                ).capitalize()
-        #    })
-        #pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
+        _invoice_html = get_template('shop/invoice.html').render(
+            {
+                'invoice': _invoice,
+                'sumInWords': num2words(_invoice.toPay(),
+                                        lang='ru',
+                                        to='currency',
+                                        currency='RUB',
+                                        seperator=' ',
+                                        cents=False
+                                        ).capitalize()
+            })
+        _pdf = pdfkit.from_string(_invoice_html, False, options={'quiet': ''})
 
         subject = render_to_string(
             "shop/email/order_subject.txt", 
@@ -438,7 +438,7 @@ def endOfOrder(request):
             [ request.user.email ],
         )
         msg.attach_alternative(html_message, "text/html")
-        #msg.attach('invoice1.pdf', pdf, 'application/pdf')
+        msg.attach('invoice1.pdf', _pdf, 'application/pdf')
         msg.send()
     else:
         return HttpResponse('ERROR')
