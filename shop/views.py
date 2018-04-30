@@ -425,7 +425,7 @@ def endOfOrder(request):
             [ request.user.email, ]
         )
         msg.attach_alternative(html_message, "text/html")
-        msg.content_subtype = "html"
+        #msg.content_subtype = "html"
         
         _invoice_html = get_template('shop/invoice.html').render(
             {
