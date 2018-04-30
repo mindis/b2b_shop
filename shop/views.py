@@ -247,7 +247,8 @@ def getInvoicePdf(request):
         pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
 
         return HttpResponse(pdf, content_type='application/pdf')
-    return HttpResponse('You have not access to this invoice')
+    return redirect('/')
+    # return HttpResponse('You have not access to this invoice')
 
 
 def getInvoice(request):
@@ -264,7 +265,8 @@ def getInvoice(request):
                                                   cents=False
                                                   ).capitalize()
                       })
-    return HttpResponse('You have not access to this invoice')
+    return redirect('/')
+    #return HttpResponse('You have not access to this invoice')
 
 
 def cart(request):
@@ -299,7 +301,8 @@ def makeOrder(request):
             cart = cart[0]
         cart.delZeroes()
         if not cart.checkOrder():
-            return HttpResponse('total sum is too low')
+            return redirect('/order/')
+            # return HttpResponse('total sum is too low')
         return render(request, 'shop/customerinfo.html',
                       {
                           'cart': cart,
@@ -349,7 +352,8 @@ def makeOrder(request):
     cart.delZeroes()
 
     if not cart.checkOrder():
-        return HttpResponse('total sum is too low')
+        return redirect('/order/')
+        # return HttpResponse('total sum is too low')
 
     if request.user not in org.owners.all():
         org.owners.add(request.user)
@@ -387,6 +391,7 @@ def itemListSelection(request, cls):
     productClasses = ProductClass.objects.all()
     cls = str(cls)
     if len(productClasses.filter(slug=cls)) == 0:
+        return redirect('/')
         raise Http404('there are no such tag: ' + cls)
     return render(request, 'shop/itemList.html',
                   {
