@@ -444,7 +444,8 @@ def endOfOrder(request):
         _invoice.sent = True;
         _invoice.save()
     else:
-        return HttpResponse('ERROR')
+        return redirect('/')
+        #return HttpResponse('ERROR')
 
     return render(request, 'shop/endoforder.html', {'pk': pk})
 
