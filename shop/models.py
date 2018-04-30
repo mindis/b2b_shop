@@ -459,6 +459,7 @@ class Invoice(models.Model):
         max_digits=50, decimal_places=2, default=0, blank=True)
     deliverySum = models.DecimalField(
         max_digits=50, decimal_places=2, default=0, blank=True)
+    sent = models.BooleanField(default=False)
 
     def calculateDelivery(self):
         self.deliverySum = self.order.getDelivery()
