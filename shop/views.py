@@ -242,7 +242,7 @@ def getInvoicePdf(request):
                                         currency='RUB',
                                         seperator=' ',
                                         cents=False
-                                        ).capitalize()
+                                        ).capitalize(),
             })
         pdf = pdfkit.from_string(invoice_html, False, options={'quiet': ''})
 
@@ -263,7 +263,7 @@ def getInvoice(request):
                                                   currency='RUB',
                                                   seperator=' ',
                                                   cents=False
-                                                  ).capitalize()
+                                                  ).capitalize(),
                       })
     return redirect('/')
     #return HttpResponse('You have not access to this invoice')

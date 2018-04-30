@@ -101,4 +101,6 @@ $(document).ready(function() {
 		$(".item-quantity[data-product=" + item + "]").val(cart[item]);
 		update(item);
 	});
+
+    $('#ok-span').popover({trigger: ""});
 });
