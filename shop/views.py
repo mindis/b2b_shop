@@ -439,7 +439,7 @@ def endOfOrder(request):
                                         ).capitalize()
             })
         _pdf = pdfkit.from_string(_invoice_html, False, options={'quiet': ''})
-        msg.attach('1.pdf', _pdf, 'pdf')
+        msg.attach('invoice.pdf', _pdf, 'application/pdf')
         msg.send()
     else:
         return HttpResponse('ERROR')
