@@ -31,7 +31,7 @@ function update(product, tag) {
     console.log(item, q, getQuantityInCart(item), getItemPrice(item, q + getQuantityInCart(item)));
 	$(".item-price[data-product=" + product + "][data-tag=" + tag + "]").text(normalize(getItemPrice(item, q + getQuantityInCart(item))));
 
-	$(".item-count[data-product=" + product + "][data-tag=" + tag + "]").text(items[item].quantity);
+	//$(".item-count[data-product=" + product + "][data-tag=" + tag + "]").text(items[item].quantity);
 
 	$(".product-sum[data-product=" + product + "][data-tag=" + tag + "]").text(
 		normalize(getItemPrice(item, q + getQuantityInCart(item)) * q) + " р");
@@ -87,4 +87,5 @@ $(document).ready(function() {
 		updatePricelist(product, tag);
 	});
 
+    //$('[data-toggle="popover"]').popover({trigger: "focus"});
 });

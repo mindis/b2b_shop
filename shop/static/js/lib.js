@@ -194,7 +194,7 @@ $(document).ready(function () {
     });
     // end of script
 
-    $('[data-toggle="popover"]').popover({ trigger: "hover" });
+    //$('[data-toggle="popover"]').popover({ trigger: "hover" });
     $('[data-toggle="tooltip"]').tooltip();
 
     $.ajax({

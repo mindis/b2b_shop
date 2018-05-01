@@ -87,4 +87,5 @@ $(document).ready(function() {
 		updatePricelist(product, tag);
 	});
 
+    $('[data-toggle="popover"]').popover({trigger: "focus"});
 });

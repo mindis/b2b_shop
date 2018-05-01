@@ -180,7 +180,7 @@ $(document).ready(function(){
     });
     // end of script
 
-    $('[data-toggle="popover"]').popover({trigger: "hover focus"});
+    //$('[data-toggle="popover"]').popover({trigger: "focus"});
     $('[data-toggle="tooltip"]').tooltip();
 
     $.ajax({url: "/getminordersum", async: false, type: "POST", success: function(result) {
