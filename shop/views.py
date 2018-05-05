@@ -384,6 +384,7 @@ def itemList(request):
                   {
                       'productClasses': productClasses,
                       'cls': 'all',
+                      'curitem': '',
                   })
 
 
@@ -396,7 +397,8 @@ def itemListSelection(request, cls):
     return render(request, 'shop/itemList.html',
                   {
                       'productClasses': productClasses,
-                      'cls': cls
+                      'cls': cls,
+                      'curitem': '',
                   })
 
 
@@ -458,8 +460,16 @@ def endOfOrder(request):
 def itemPage(request, itemSlug):
     item = get_object_or_404(Product.objects, slug=itemSlug)
     if not item.available:
-        return HttpResponse('Product ' + item.slug + ' is not available now.')
-    return render(request, 'shop/itemPage.html', {'item': item})
+        # HttpResponse('Product ' + item.slug + ' is not available now.')
+        return redirect('/')
+    productClasses = ProductClass.objects.all()
+    return render(request, 'shop/itemList.html',
+                  {
+                      'productClasses': productClasses,
+                      'cls': 'all',
+                      'curitem': itemSlug,
+                  })
+    # return render(request, 'shop/itemPage.html', {'item': item})
 
 
 def about(request):
