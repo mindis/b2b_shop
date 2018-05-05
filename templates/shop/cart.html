@@ -30,14 +30,14 @@
                 {% for orderItem in cart.items.all %}
                 <tr id="tr_{{orderItem.product.slug}}">
                     <th>
-                        <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
+                        <img class="img-rounded" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
                     </th>
                     <th>
                         <h5>
-                            <span style="border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>{{ orderItem.product.name }}</h4>' data-html="true"
+                            <a href="#" data-toggle="popover"  title='<h4>{{ orderItem.product.name }}</h4>' data-html="true"
                                 data-content='
                         <div>
-                            <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="100px" width="100px" />
+                            <img class="img-rounded" src="/media/{{ orderItem.product.image }}" height="100px" width="100px" />
                         </div>
                         <div>
                             {{ orderItem.product.description|safe }}
@@ -46,11 +46,11 @@
                             {% for pclass in orderItem.product.product.productClass.all %}
                                 <a href="/itemlist/{{pclass.slug}}" class="btn btn-primary">{{pclass.name}}</a>
                             {% endfor%}
-                        </div>'>{{ orderItem.product.name }} </span>
+                        </div>'>{{ orderItem.product.name }} </a>
                         </h5>
                     </th>
                     <th>
-                        <span style="white-space: nowrap; border-bottom: 1px dashed blue;" data-toggle="popover" title='<h4>Цены</h4>' data-html="true"
+                        <a data-toggle="popover" title='<h4>Цены</h4>' data-html="true"
                             data-content='
                             <div>
                                 <table class="table table-striped">
@@ -71,7 +71,7 @@
                                 </table>
                             </div>' class="item-price" data-product="{{orderItem.product.slug}}">
                             {{orderItem.price}}&nbsp;p
-                        </span>
+                        </a>
                     </th>
                     <th>
                         <span style="white-space: nowrap;" class="item-stored" data-product="{{orderItem.product.slug}}"> {{orderItem.product.quantity}}</span> {{orderItem.product.product.measure}}
