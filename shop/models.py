@@ -148,12 +148,12 @@ class SaleSum(models.Model):
         return len(product.product.productclass_set.all().intersect()) != 0
 
     def checkOrder(self, order):
-        if not forUser(order.user):
+        if not self.forUser(order.user):
             return False
         sm = reduce(
             (lambda a, b: a + b),
             map(
-                (lambda item: Decimal(item.price) * Deciamal(item.quantity)),
+                (lambda item: Decimal(item.price) * Decimal(item.quantity)),
                 order.items.objects.all()
             )
         )

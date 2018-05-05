@@ -266,7 +266,7 @@ def getInvoice(request):
                                                   ).capitalize(),
                       })
     return redirect('/')
-    #return HttpResponse('You have not access to this invoice')
+    # return HttpResponse('You have not access to this invoice')
 
 
 def cart(request):
@@ -410,28 +410,28 @@ def endOfOrder(request):
     _invoice = get_object_or_404(Invoice.objects, pk=request.GET['pk'])
     if not _invoice.sent and (request.user.is_superuser or request.user == _invoice.order.user):
         subject = render_to_string(
-            "shop/email/order_subject.txt", 
-            { 'current_site' : get_current_site(request) }
-            )
+            "shop/email/order_subject.txt",
+            {'current_site': get_current_site(request)}
+        )
         subject = "".join(subject.splitlines())
         message = render_to_string(
-            "shop/email/order.txt", 
-            { 'current_site' : get_current_site(request) }
-            )
+            "shop/email/order.txt",
+            {'current_site': get_current_site(request)}
+        )
         html_message = render_to_string(
-            "shop/email/order.html", 
-            { 'current_site' : get_current_site(request) }
-            )
+            "shop/email/order.html",
+            {'current_site': get_current_site(request)}
+        )
 
         msg = EmailMultiAlternatives(
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [ request.user.email, ]
+            [request.user.email, ]
         )
         msg.attach_alternative(html_message, "text/html")
-        #msg.content_subtype = "html"
-        
+        # msg.content_subtype = "html"
+
         _invoice_html = get_template('shop/invoice.html').render(
             {
                 'invoice': _invoice,
@@ -446,11 +446,11 @@ def endOfOrder(request):
         _pdf = pdfkit.from_string(_invoice_html, False, options={'quiet': ''})
         msg.attach('invoice.pdf', _pdf, 'application/pdf')
         msg.send()
-        _invoice.sent = True;
+        _invoice.sent = True
         _invoice.save()
     else:
         return redirect('/')
-        #return HttpResponse('ERROR')
+        # return HttpResponse('ERROR')
 
     return render(request, 'shop/endoforder.html', {'pk': pk})
 
