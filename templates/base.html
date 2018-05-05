@@ -18,12 +18,19 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" ></script>
         <script type="text/javascript" src="{% static 'js/lib.js' %}" ></script>
         <title> shop name</title>
+        <style>
+          .navbar {
+          }
+          .container-fluid {
+            
+          }
+        </style>
         {% block head %}
         {% endblock %}
     </head>
     <body>
         {% csrf_token %}
-        <nav class="navbar navbar-inverse bg-inverse navbar-fixed-top">
+        <nav class="navbar navbar-default  navbar-fixed-top">
           <div class="container-fluid">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -65,6 +72,7 @@
             </div>
           </div>
         </nav>
+      
         <div class="content container" style="margin-top:100px;">
             {% block content %}
             {% endblock %}
