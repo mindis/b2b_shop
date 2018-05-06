@@ -45,7 +45,7 @@ class OrderInline(SuperInlineModelAdmin, admin.StackedInline):
 
 class InvoiceAdmin(SuperModelAdmin):
     inlines = [OrderInline, ]
-    list_display = ('pk', 'date', 'seller', 'customer', 'toPay')
+    list_display = ('pk', 'date', 'getStatus', 'customer', 'toPay')
     list_filter = ('order__status', 'seller', 'customer',)
     search_fields = ['seller__name', 'customer__name']
 

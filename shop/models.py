@@ -479,6 +479,9 @@ class Invoice(models.Model):
         self.calculateDelivery()
         self.calculateTaxes()
 
+    def getStatus(self):
+        return self.order.status
+
     def toPay(self):
         return self.order.getTotalSum() + self.deliverySum
 
