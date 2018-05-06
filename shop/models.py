@@ -52,6 +52,7 @@ class ProductVariant(models.Model):
         'Product', on_delete=models.CASCADE, blank=True)
     quantity = models.IntegerField(default=0, blank=True)
     vendorCode = models.CharField(default=0, max_length=50, blank=True)
+    multiplicity = models.IntegerField(default=1)
     available = models.BooleanField(default=True)
 
     class Meta:

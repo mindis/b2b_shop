@@ -34,6 +34,7 @@ def getItems(request):
             obj['slug'] = item.slug
             obj['measure'] = item.product.measure
             obj['quantity'] = item.quantity
+            obj['multiplicity'] = item.multiplicity
             res[item.slug] = obj
         return HttpResponse(json.dumps(res))
     return HttpResponse('error')
@@ -109,6 +110,8 @@ def addToCart(request):
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
+                if cart.getQuantity(item) + pQuantity % item.multiplicity != 0:
+                    return HttpResponse('must be divisible by multiplicity')
                 # if (item.quantity < cart.getQuantity(item) + pQuantity):
                 #    return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, cart.getQuantity(item) + pQuantity)
@@ -140,6 +143,10 @@ def setInCart(request):
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
+
+                if pQuantity % item.multiplicity != 0:
+                    return HttpResponse('must be divisible by multiplicity')
+
                 # if (item.quantity < pQuantity):
                 #    return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, pQuantity)

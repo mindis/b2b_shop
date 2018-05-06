@@ -58,8 +58,8 @@ $(document).ready(function () {
             } else if (data == 'not authenticated') {
                 notifyId('#btn_rm_' + item, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
                 $("#tr_" + item).hide();
-            } else if (data == 'stored quantity is too small') {
-                notifyId('#btn_rm_' + item, 'на складе нет столько товаров');
+            } else if (data == 'must be divisible by multiplicity') {
+                notifyId('#btn_rm_' + item, 'Количество должно делиться на кратность.');
                 $("#tr_" + item).hide();
             } else {
                 notifyId('#btn_rm_' + item, 'обновлено');
@@ -80,8 +80,8 @@ $(document).ready(function () {
                 notifyId('#btn_rm_' + item, 'ошибка');
             } else if (data == 'not authenticated') {
                 notifyId('#btn_rm_' + item, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
-            } else if (data == 'stored quantity is too small') {
-                // есть notifyId('#btn_rm_' + item, 'на складе нет столько товаров');
+            } else if (data == 'must be divisible by multiplicity') {
+                notifyId('#btn_rm_' + item, 'Количество должно делиться на кратность.');
             } else {
                 notifyId('#btn_rm_' + item, 'обновлено');
             }

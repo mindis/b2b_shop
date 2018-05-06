@@ -18,6 +18,7 @@ function updatePricelist(product, tag) {
 
     fill += "</tbody></table></div>"
     $(obj).attr("data-content", fill);
+    $(".item-multiplicity[data-product=" + product + "][data-tag=" + tag + "]").text(items[item]["multiplicity"]);
 }
 
 function notify(text) {
@@ -35,6 +36,8 @@ function update(product, tag) {
 
     $(".product-sum[data-product=" + product + "][data-tag=" + tag + "]").text(
         normalize(getItemPrice(item, q + getQuantityInCart(item)) * q) + "\u202Fр");
+
+    $(".item-multiplicity[data-product=" + product + "][data-tag=" + tag + "]").text(items[item]["multiplicity"]);
     //updatePricelist(product, tag);
     //console.log(stored[item], item)
 }
@@ -53,8 +56,8 @@ $(document).ready(function () {
                 notifyId('#btn_' + product + '_' + tag, 'ошибка');
             } else if (data == 'not authenticated') {
                 notifyId('#btn_' + product + '_' + tag, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
-            } else if (data == 'stored quantity is too small') {
-                // теперь есть notifyId('#btn_' + product + '_' + tag, 'на складе нет столько товаров');
+            } else if (data == 'must be divisible by multiplicity') {
+                notifyId('#btn_' + product + '_' + tag, 'Количество должно делиться на кратность.');
             } else {
                 notifyId('#btn_' + product + '_' + tag, 'добавлено ' + q.toString() + ' ' + items[item].measure);
             }
