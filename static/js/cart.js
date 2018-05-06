@@ -102,6 +102,6 @@ $(document).ready(function () {
         update(item);
     });
 
-    $('#ok-span').popover({ trigger: "" });
     $('[data-toggle="popover"]').popover({ trigger: "hover" });
+    $('#ok-span').popover({ trigger: "" });
 });
