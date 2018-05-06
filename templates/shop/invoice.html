@@ -29,7 +29,7 @@
 <body>
 	<div style="margin: 50px;">
 		<div class="row">
-			<table>
+			<table cellpadding="5px">
 					<tr>
 						<td colspan="2" rowspan="2">{{invoice.seller.bank}}</td>
 					    <td>БИК</td>
@@ -50,10 +50,10 @@
 				  	</tr>
 			</table>
 		</div>
-		<div class="row">
+		<div class="row" style="margin-top: 50px; margin-bottom: 25px;">
 			<h3>Счет на оплату №{{invoice.pk}} от {{invoice.date|date:"DATE_FORMAT"}}</h3>
 			<hr/>
-			<table class="noborder info">
+			<table class="noborder info" cellpadding="15px">
 				<tbody>
 					<tr class="noborder info">
 						<td style="vertical-align: top;" class="noborder info">Поставщик:</td>
@@ -68,7 +68,7 @@
 			</table>
 		</div>
 		<div class="row">
-			<table class="noborder">
+			<table class="noborder" cellpadding="5px">
 				<thead>
 					<tr>
 						<th style="width: 3%; text-align: center;">№</th>
@@ -129,15 +129,18 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="row">
+		<div class="row" style="margin-top:25px">
 		<!--<p>Всего наименований {{invoice.order.items.all|length}}, на сумму {{invoice.order.getTotalSum|floatformat:2|localize}} руб</p>-->
 		<p>Всего к оплате: <strong>{{sumInWords}}</strong></p>
 		</div>
-		<div class="row">
-			<p></p>
-		</div>
 		<hr/>
-		<div class="row">
+		<div class="row" style="margin-top:25px">
+			<div style="width: 100%;">
+				<div style="width: 100%; background: orange;">
+					<h3>здесь подпись</h3>
+					<hr color="black"/>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
