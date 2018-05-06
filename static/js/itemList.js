@@ -11,7 +11,7 @@ function updatePricelist(product, tag) {
     console.log(keys);
     keys.forEach(function (val, index, array) {
         fill += "<tr>";
-        fill += "<th>" + val + "</th>";
+        fill += "<th> от " + val + "</th>";
         fill += "<th>" + normalize(priceList[item][val]) + "</th>";
         fill += "</tr>";
     });
@@ -54,7 +54,7 @@ $(document).ready(function () {
             } else if (data == 'not authenticated') {
                 notifyId('#btn_' + product + '_' + tag, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
             } else if (data == 'stored quantity is too small') {
-                notifyId('#btn_' + product + '_' + tag, 'на складе нет столько товаров');
+                // теперь есть notifyId('#btn_' + product + '_' + tag, 'на складе нет столько товаров');
             } else {
                 notifyId('#btn_' + product + '_' + tag, 'добавлено ' + q.toString() + ' ' + items[item].measure);
             }

@@ -81,7 +81,7 @@ $(document).ready(function () {
             } else if (data == 'not authenticated') {
                 notifyId('#btn_rm_' + item, 'Для добавления товаров в корзину, пожалуйста, войдите или зарегистрируйтесь.');
             } else if (data == 'stored quantity is too small') {
-                notifyId('#btn_rm_' + item, 'на складе нет столько товаров');
+                // есть notifyId('#btn_rm_' + item, 'на складе нет столько товаров');
             } else {
                 notifyId('#btn_rm_' + item, 'обновлено');
             }

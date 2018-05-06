@@ -109,8 +109,8 @@ def addToCart(request):
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
-                if (item.quantity < cart.getQuantity(item) + pQuantity):
-                    return HttpResponse('stored quantity is too small')
+                # if (item.quantity < cart.getQuantity(item) + pQuantity):
+                #    return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, cart.getQuantity(item) + pQuantity)
                 cart.delZeroes()
                 return HttpResponse('ok')
@@ -140,8 +140,8 @@ def setInCart(request):
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
-                if (item.quantity < pQuantity):
-                    return HttpResponse('stored quantity is too small')
+                # if (item.quantity < pQuantity):
+                #    return HttpResponse('stored quantity is too small')
                 cart.setQuantity(item, pQuantity)
                 cart.delZeroes()
                 return HttpResponse('ok')
@@ -450,11 +450,18 @@ def endOfOrder(request):
         msg.send()
         _invoice.sent = True
         _invoice.save()
-    else:
-        return redirect('/')
+    # else:
+        # return redirect('/')
         # return HttpResponse('ERROR')
 
-    return render(request, 'shop/endoforder.html', {'pk': pk})
+    showNotification = False
+
+    #item = get_object_or_404(ProductVariant.objects, slug=pItem)
+    for item in _invoice.order.items.all():
+        if item.quantity > item.product.quantity:
+            showNotification = True
+
+    return render(request, 'shop/endoforder.html', {'pk': pk, 'notification': showNotification})
 
 
 def itemPage(request, itemSlug):

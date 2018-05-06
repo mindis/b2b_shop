@@ -14,9 +14,21 @@ $(document).ready(function() {
     <h1 align="center">Заказ оформлен</h1>
 </div>
 <div class="row">
+    {% if notification %}
+        <div class="alert alert-warning">
+            <h4 align="center">
+                <strong>Внимание!</strong>
+                <p>Не все из заказанных товаров есть в наличии на складе. С вами свяжется менеджер для обсуждения заказа.</p>
+            </h4>
+        </div>
+    {% endif %}
+    </div>
+<div class="row">
 <h2 align="center">
     Спасибо за заказ, вам на эл. почту выслан счет в формате pdf.
 </h2>
+</div>
+<div class="row">
 <h2 align="center">
     В случае возникновения проблем или вопросов обращайтесь по адресу <a href="mailto:email@email.com">email@email.com</a>.
 </h2>
