@@ -57,6 +57,7 @@
             onSelect: function (suggestion) {
             }
         });
+        $('[data-toggle="popover"]').popover({ trigger: "hover" });
     });
 </script> 
 {% endblock %} 
@@ -83,14 +84,14 @@
                     {% for orderItem in cart.items.all %}
                     <tr id="tr_{{orderItem.product.slug}}">
                         <th>
-                            <img class="img-circle" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
+                            <img class="img-rounded" src="/media/{{ orderItem.product.image }}" height="50px" width="50px" />
                         </th>
                         <th>
                             <h5>
-                                <span style="border-bottom: 1px dashed blue;" data-toggle="popover" title="{{ orderItem.product.name }}" data-html="true"
+                                <a data-toggle="popover" title="{{ orderItem.product.name }}" data-html="true"
                                     data-content="
                         <div>
-                            <img class='img-circle' src='/media/{{ orderItem.product.image }}' height='100px' width='100px' />
+                            <img class='img-rounded' src='/media/{{ orderItem.product.image }}' height='100px' width='100px' />
                         </div>
                         <div>
                             {{ orderItem.product.description|safe }}
@@ -99,7 +100,7 @@
                             {% for pclass in orderItem.product.product.productClass.all %}
                                 <a href='/itemlist/{{pclass.slug}}' class='btn btn-primary'>{{pclass.name}}</a>
                             {% endfor%}
-                        </div>">{{ orderItem.product.name }} </span>
+                        </div>">{{ orderItem.product.name }} </a>
                             </h5>
                         </th>
                         <th style="white-space: nowrap;">
@@ -196,18 +197,18 @@
         <div style="margin-top: 20px;margin-bottom: 20px;" class="row">
             <div class="col-sm-9">
             </div>
+            <div class="col-sm-1">
+                <a id="back" class="btn btn-danger" href="/cart" style="width:100%;">
+                    назад
+                </a>
+            </div>
             <div class="col-sm-2">
                 <button id="submit" class="btn btn-success" name="submit" style="width:100%;">
                     Далее
                 </button>
             </div>
-            <div class="col-sm-1">
-                <a id="back" class="btn btn-danger" href="cart" style="width:100%;">
-                    назад
-                </a>
-            </div>
-            <div>
+        </div>
     </form>
-    <div>
+</div>
 
     {% endblock %}
