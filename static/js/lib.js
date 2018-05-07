@@ -170,7 +170,7 @@ function notifyId(id, text) {
     console.log(id, text);
     $(id).attr("data-content", text);
     $(id).popover("show");
-    setTimeout(function () { $(id).popover("hide") }, 3000);
+    setTimeout(function () { $(id).popover("hide"); $(id).attr("data-content", ""); }, 4000);
 }
 
 

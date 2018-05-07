@@ -72,35 +72,36 @@ class ProductVariant(models.Model):
                 mnCount = price.quantity
         return mn
 
-    def updateQuantitiesXls(filename):
-        startProducts = 6
-        wb = xlrd.open_workbook(filename)
-        sheet = wb.sheets()[0]
 
-        updatedItems = []
-        errors = []
+def updateQuantitiesXls(filename):
+    startProducts = 6
+    wb = xlrd.open_workbook(filename)
+    sheet = wb.sheets()[0]
 
-        for rn in range(startProducts, sheet.nrows - 1):
-            row = sheet.row_values(rn)
-            cur_vendorCode = str(row[2])
-            cur_quantity = int(row[3])
+    updatedItems = []
+    errors = []
 
-            try:
-                product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
-                product.quantity = cur_quantity
-                product.save()
-                updatedItems.append({
-                                    'vendorCode': product.vendorCode,
-                                    'name_in_file': str(row[0]),
-                                    'name_in_db': product.name,
-                                    'quantity': product.quantity
-                                    })
-            except Exception:
-                errors.append({
-                    'vendorCode': cur_vendorCode,
-                    'name_in_file': str(row[0])
-                })
-        return updatedItems, errors
+    for rn in range(startProducts, sheet.nrows - 1):
+        row = sheet.row_values(rn)
+        cur_vendorCode = str(row[2])
+        cur_quantity = int(row[3])
+
+        try:
+            product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
+            product.quantity = cur_quantity
+            product.save()
+            updatedItems.append({
+                                'vendorCode': product.vendorCode,
+                                'name_in_file': str(row[0]),
+                                'name_in_db': product.name,
+                                'quantity': product.quantity
+                                })
+        except Exception:
+            errors.append({
+                'vendorCode': cur_vendorCode,
+                'name_in_file': str(row[0])
+            })
+    return updatedItems, errors
 
 
 class Price(models.Model):
@@ -294,6 +295,9 @@ class Order(models.Model):
         return 'Order:' + str(self.datetime)
         + ' by ' + str(self.organisation)
         + ' status:' + str(self.status.name)
+
+    def isCart(self):
+        return self.status == OrderStatus.objects.get(pk=1)
 
     def activate(self):
         self.status = OrderStatus.objects.get(pk=2)

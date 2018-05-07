@@ -110,7 +110,7 @@ def addToCart(request):
                 else:
                     cart = cart[0]
                 item = get_object_or_404(ProductVariant.objects, slug=pItem)
-                if cart.getQuantity(item) + pQuantity % item.multiplicity != 0:
+                if (cart.getQuantity(item) + pQuantity) % item.multiplicity != 0:
                     return HttpResponse('must be divisible by multiplicity')
                 # if (item.quantity < cart.getQuantity(item) + pQuantity):
                 #    return HttpResponse('stored quantity is too small')
@@ -377,7 +377,7 @@ def makeOrder(request):
     cart.invoice = invoice
 
     for item in cart.items.all():
-        item.product.quantity = max(0, item.product.quantity - item.quantity)
+        item.product.quantity = item.product.quantity - item.quantity
         item.product.save()
 
     cart.activate()
@@ -517,7 +517,7 @@ def adminUploadQuantities(request):
         form = shop.forms.UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
-            updated, errors = ProductVariant.updateQuantitiesXls(
+            updated, errors = updateQuantitiesXls(
                 'files/quantity/' + request.FILES['file'].name)
 
             return render(request, 'admin/admin-update-quantities.html',
