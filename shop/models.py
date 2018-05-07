@@ -89,14 +89,27 @@ def updateQuantitiesXls(filename):
         try:
             product = ProductVariant.objects.get(vendorCode=cur_vendorCode)
             product.quantity = cur_quantity
+            for invoice in Invoice.objects.filter(order__status=OrderStatus.objects.get(pk=2)):
+                print(invoice.pk)
+
+                itemInInvoice = invoice.order.items.filter(
+                    product__pk=product.pk)
+
+                if len(itemInInvoice) == 0:
+                    continue
+
+                product.quantity -= itemInInvoice[0].quantity
+
             product.save()
             updatedItems.append({
                                 'vendorCode': product.vendorCode,
                                 'name_in_file': str(row[0]),
                                 'name_in_db': product.name,
-                                'quantity': product.quantity
+                                'new_quantity': product.quantity,
+                                'quantity_in_file': cur_quantity,
                                 })
-        except Exception:
+        except Exception as exc:
+            print(exc)
             errors.append({
                 'vendorCode': cur_vendorCode,
                 'name_in_file': str(row[0])
