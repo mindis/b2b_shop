@@ -117,6 +117,13 @@ def updateQuantitiesXls(filename):
     return updatedItems, errors
 
 
+class CarouselImage(models.Model):
+    description = models.TextField(default='', blank=True)
+    image = models.ImageField(default="nophoto.png", blank=True)
+    product = models.ForeignKey(
+        'Product', on_delete=models.CASCADE, blank=True)
+
+
 class Price(models.Model):
     price = models.DecimalField(
         max_digits=50, decimal_places=2, default=0, blank=True)

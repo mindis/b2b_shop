@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import ProductClass, Product, ProductVariant, \
     SaleSum, SaleQuantity, Organisation, \
     OrderItem, Order, Invoice, SellerOrganisation,\
-    Price, OrderStatus, Delivery, ShopConstant
+    Price, OrderStatus, Delivery, ShopConstant, CarouselImage
 
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
@@ -55,8 +55,13 @@ class ProductVariantInline(SuperInlineModelAdmin, admin.TabularInline):
     extra = 0
 
 
+class CarouselImageInline(SuperInlineModelAdmin, admin.TabularInline):
+    model = CarouselImage
+    extra = 0
+
+
 class ProductAdmin(SuperModelAdmin):
-    inlines = [ProductVariantInline, ]
+    inlines = [ProductVariantInline, CarouselImageInline, ]
     list_display = ('pk', 'name', 'slug', 'available')
     list_filter = ('available', 'productClass',)
     search_fields = ['name', 'slug']
