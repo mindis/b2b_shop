@@ -9,9 +9,12 @@
 	<title>invoice</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 	<style type="text/css">
+	html {
+		font-family: Arial, sans-serif;
+		font-size: 18px;
+	}
 
-
-	table, th, td {
+	table, td, td {
 		border: 1px solid black;
 		border-collapse: collapse;
 	}
@@ -21,7 +24,7 @@
 	.info {
 		width: auto;
 	}
-	table.noborder, td.noborder, th.noborder {
+	table.noborder, td.noborder, td.noborder {
 		border: 0px solid white;
 	}
 	</style>
@@ -51,17 +54,19 @@
 			</table>
 		</div>
 		<div class="row" style="margin-top: 50px; margin-bottom: 25px;">
-			<h3>Счет на оплату №{{invoice.pk}} от {{invoice.date|date:"DATE_FORMAT"}}</h3>
+			<div style="text-align: center; font-size: 24px; font-weight: 600;">
+				<p>Счет на оплату №{{invoice.pk}} от {{invoice.date|date:"DATE_FORMAT"}}</p>
+			</div>
 			<hr/>
 			<table class="noborder info" cellpadding="15px">
 				<tbody>
 					<tr class="noborder info">
 						<td style="vertical-align: top;" class="noborder info">Поставщик:</td>
-						<td class="noborder info"><strong>{{invoice.seller.name}},<br> ИНН {{invoice.seller.inn}}, КПП {{invoice.seller.kpp}}</strong></td>
+						<td class="noborder info">{{invoice.seller.name}},<br> ИНН {{invoice.seller.inn}}, КПП {{invoice.seller.kpp}}</td>
 					</tr>
 					<tr class="noborder info">
 						<td style="vertical-align: top;" class="noborder info">Покупатель:</td>
-						<td class="noborder info"><strong>{{invoice.customer.name}},<br> ИНН {{invoice.customer.inn}}, КПП {{invoice.customer.kpp}}, {{invoice.customer.address}}</strong></td>
+						<td class="noborder info">{{invoice.customer.name}},<br> ИНН {{invoice.customer.inn}}, КПП {{invoice.customer.kpp}}, {{invoice.customer.address}}</td>
 					</tr>
 
 				</tbody>
@@ -71,12 +76,12 @@
 			<table class="noborder" cellpadding="5px">
 				<thead>
 					<tr>
-						<th style="width: 3%; text-align: center;">№</th>
-						<th style="width: 40%; text-align: center;">Товары</th>
-						<th style="width: 15%; text-align: center;">Кол-во</th>
-						<th style="width: 10%; text-align: center;">Ед.</th>
-						<th style="width: 12%; text-align: center;">Цена</th>
-						<th style="width: 20%; text-align: center;">Сумма</th>
+						<td style="width: 3%; text-align: center;">№</td>
+						<td style="width: 40%; text-align: center;">Товары</td>
+						<td style="width: 15%; text-align: center;">Кол-во</td>
+						<td style="width: 10%; text-align: center;">Ед.</td>
+						<td style="width: 12%; text-align: center;">Цена</td>
+						<td style="width: 20%; text-align: center;">Сумма</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -102,36 +107,36 @@
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
-						<th class="noborder" colspan="2" style="text-align: right;">Итого:</th>
-						<th class="noborder" style="text-align: right;">{{invoice.toPay|floatformat:2|localize}}</th>
+						<td class="noborder" colspan="2" style="text-align: right; font-weight: 600;">Итого:</td>
+						<td class="noborder" style="text-align: right;">{{invoice.toPay|floatformat:2|localize}}</td>
 					</tr>
 					<!--<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
-						<th class="noborder" colspan="2" style="text-align: right;">Доставка:</th>
-						<th class="noborder" style="text-align: right;">{{invoice.deliverySum|floatformat:2|localize}}</th>
+						<td class="noborder" colspan="2" style="text-align: right;">Доставка:</td>
+						<td class="noborder" style="text-align: right;">{{invoice.deliverySum|floatformat:2|localize}}</td>
 					</tr>-->
 					<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
-						<th class="noborder" colspan="2" style="text-align: right;">В том числе НДС:</th>
-						<th class="noborder" style="text-align: right;">{{invoice.taxes|floatformat:2|localize}}</th>
+						<td class="noborder" colspan="2" style="text-align: right; font-weight: 600;">В том числе НДС:</td>
+						<td class="noborder" style="text-align: right;">{{invoice.taxes|floatformat:2|localize}}</td>
 					</tr>
 					<tr class="noborder">
 						<td class="noborder"></td>
 						<td class="noborder"></td>
 						<td class="noborder"></td>
-						<th class="noborder" colspan="2" style="text-align: right;">Всего к оплате:</th>
-						<th class="noborder" style="text-align: right;">{{invoice.toPay|floatformat:2|localize}}</th>
+						<td class="noborder" colspan="2" style="text-align: right; font-weight: 600;">Всего к оплате:</td>
+						<td class="noborder" style="text-align: right;">{{invoice.toPay|floatformat:2|localize}}</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="row" style="margin-top:25px">
 		<!--<p>Всего наименований {{invoice.order.items.all|length}}, на сумму {{invoice.order.getTotalSum|floatformat:2|localize}} руб</p>-->
-		<p>Всего к оплате: <strong>{{sumInWords}}</strong></p>
+		<p><span  style="font-weight: 600;">Всего к оплате:</span> {{sumInWords}}</p>
 		</div>
 		<hr/>
 		<div class="row" style="margin-top:25px">
