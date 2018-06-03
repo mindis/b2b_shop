@@ -1,7 +1,7 @@
 # b2b_shop
 Internet shop for b2b wholesale trade. Written in Python3 using Django framework and many other libraries.
 
-## Futures
+## Features
 * Prices depend on quantity.
 * After making an order you will immediately get an invoice in pdf format.
 * You have a list of your previous orders with custom statuses.
