@@ -27,6 +27,7 @@
             <th>Название в файле</th>
             <th>Артикул</th>
             <th>Новое количество</th>
+            <th>Количество в файле</th>
         </tr>
         {% for item in updated %}
             <tr>
@@ -40,7 +41,10 @@
                     {{ item|getByKey:"vendorCode" }}
                 </td>
                 <td>
-                    {{ item|getByKey:"quantity" }}
+                    {{ item|getByKey:"new_quantity" }}
+                </td>
+                <td>
+                    {{ item|getByKey:"quantity_in_file" }}
                 </td>
             </tr>
         {% endfor %}

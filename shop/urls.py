@@ -6,11 +6,18 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r"^admin/admin_update_quantities/$", views.adminUploadQuantities, name="adminUploadQuantities"),
-    url(r"^accounts?/login/$", views.LoginView.as_view(), name="account_login"),
-    url(r"^accounts?/signup/$", views.SignupView.as_view(), name="account_signup"),
-    url(r"^accounts?/password_change", auth_views.PasswordChangeView.as_view(template_name='account/password_change.html'), name="password_change"),
-    url(r"^password_change_done", auth_views.PasswordChangeView.as_view(template_name='account/password_change_done.html'), name="password_change_done"),
+    url(r"^admin/admin_update_quantities/$",
+        views.adminUploadQuantities, name="adminUploadQuantities"),
+    url(r"^accounts?/login/$", views.LoginView.as_view(),
+        name="account_login"),
+    url(r"^accounts?/signup/$", views.SignupView.as_view(),
+        name="account_signup"),
+    url(r"^accounts?/password_change", auth_views.PasswordChangeView.as_view(
+        template_name='account/password_change.html'),
+        name="password_change"),
+    url(r"^password_change_done", auth_views.PasswordChangeView.as_view(
+        template_name='account/password_change_done.html'),
+        name="password_change_done"),
     url(r"^accounts?/", include("account.urls")),
 
     url(r'^$', views.itemList, name='itemlist'),
@@ -35,7 +42,8 @@ urlpatterns = [
     url(r'^cart/$', views.cart, name='cart'),
     url(r'^item/(?P<itemSlug>\w+)', views.itemPage, name='item'),
     url(r'^itemlist/$', views.itemList, name='itemlist'),
-    url(r'^itemlist/(?P<cls>\w+)', views.itemListSelection, name='itemlistselection'),
+    url(r'^itemlist/(?P<cls>\w+)', views.itemListSelection,
+        name='itemlistselection'),
     url(r'^login/$',  RedirectView.as_view(pattern_name='account/login')),
 
     url(r'^order/$', views.makeOrder, name='order'),

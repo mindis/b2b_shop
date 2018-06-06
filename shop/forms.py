@@ -1,6 +1,7 @@
 import account.forms
 from django import forms
 
+
 class SignupForm(account.forms.SignupForm):
 
     def __init__(self, *args, **kwargs):
