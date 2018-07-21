@@ -478,6 +478,11 @@ class Invoice(models.Model):
     customer = models.ForeignKey(
         'Organisation', on_delete=models.SET_NULL, null=True, blank=True)
     personInCharge = models.CharField(max_length=250, default='', blank=True)
+    personInChargePhone = models.CharField(
+        max_length=50, default='', blank=True)
+    personRecipient = models.CharField(max_length=250, default='', blank=True)
+    personRecipientPhone = models.CharField(
+        max_length=50, default='', blank=True)
     shipAddress = models.CharField(max_length=250, default='', blank=True)
     comment = models.TextField(default='', blank=True)
     taxes = models.DecimalField(
@@ -485,6 +490,7 @@ class Invoice(models.Model):
     deliverySum = models.DecimalField(
         max_digits=50, decimal_places=2, default=0, blank=True)
     sent = models.BooleanField(default=False)
+    trackNumber = models.CharField(max_length=50, blank=True, default='-')
 
     def calculateDelivery(self):
         self.deliverySum = self.order.getDelivery()

@@ -325,6 +325,10 @@ def makeOrder(request):
     shipAddress = ''
     comment = ''
     face = ''
+    facePhone = ''
+    personRecipient = ''
+    personRecipientPhone = ''
+
     try:
         inn = request.POST['inn']
         kpp = request.POST['kpp']
@@ -333,6 +337,9 @@ def makeOrder(request):
         comment = request.POST['comments']
         shipAddress = request.POST['shipping_address']
         face = request.POST['face']
+        facePhone = request.POST['facePhone']
+        personRecipient = request.POST['personRecipient']
+        personRecipientPhone = request.POST['personRecipientPhone']
     except:
         cart = Order.objects.get_or_create(
             user=request.user,
@@ -371,6 +378,9 @@ def makeOrder(request):
         customer=org,
         # order=cart,
         personInCharge=face,
+        personInChargePhone=facePhone,
+        personRecipient=personRecipient,
+        personRecipientPhone=personRecipientPhone,
         comment=comment,
         shipAddress=shipAddress
     )
