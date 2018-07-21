@@ -485,6 +485,7 @@ class Invoice(models.Model):
     deliverySum = models.DecimalField(
         max_digits=50, decimal_places=2, default=0, blank=True)
     sent = models.BooleanField(default=False)
+    trackNumber = models.CharField(max_length=50, blank=True, default='-')
 
     def calculateDelivery(self):
         self.deliverySum = self.order.getDelivery()
