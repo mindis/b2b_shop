@@ -478,6 +478,11 @@ class Invoice(models.Model):
     customer = models.ForeignKey(
         'Organisation', on_delete=models.SET_NULL, null=True, blank=True)
     personInCharge = models.CharField(max_length=250, default='', blank=True)
+    personInChargePhone = models.CharField(
+        max_length=50, default='', blank=True)
+    personRecipient = models.CharField(max_length=250, default='', blank=True)
+    personRecipientPhone = models.CharField(
+        max_length=50, default='', blank=True)
     shipAddress = models.CharField(max_length=250, default='', blank=True)
     comment = models.TextField(default='', blank=True)
     taxes = models.DecimalField(
